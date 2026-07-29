@@ -88,11 +88,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "/home/hatelove/Desktop/projects/ApplicationService/ApplicationService.csproj",
+      "projectUniqueName": "/home/hatelove/Desktop/projects/ApplicationService/ApplicationService/ApplicationService.csproj",
       "projectName": "ApplicationService",
-      "projectPath": "/home/hatelove/Desktop/projects/ApplicationService/ApplicationService.csproj",
+      "projectPath": "/home/hatelove/Desktop/projects/ApplicationService/ApplicationService/ApplicationService.csproj",
       "packagesPath": "/home/hatelove/.nuget/packages/",
-      "outputPath": "/home/hatelove/Desktop/projects/ApplicationService/obj/",
+      "outputPath": "/home/hatelove/Desktop/projects/ApplicationService/ApplicationService/obj/",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "/home/hatelove/.nuget/NuGet/NuGet.Config"
@@ -571,10 +571,14 @@
   },
   "logs": [
     {
-      "code": "NU1900",
+      "code": "NU1903",
       "level": "Warning",
       "warningLevel": 1,
-      "message": "Произошла ошибка при получении данных уязвимости пакета: Не удалось загрузить индекс службы для источника https://api.nuget.org/v3/index.json."
+      "message": "У пакета \"Microsoft.OpenApi\" 2.0.0 есть известная уязвимость https://github.com/advisories/GHSA-v5pm-xwqc-g5wc (уровень серьезности: высокий уровень)",
+      "libraryId": "Microsoft.OpenApi",
+      "targetGraphs": [
+        "net10.0"
+      ]
     }
   ]
 }

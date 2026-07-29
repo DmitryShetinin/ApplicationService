@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "D7gH3XN3evs=",
+  "dgSpecHash": "9rFkCIJHoXI=",
   "success": true,
-  "projectFilePath": "/home/hatelove/Desktop/projects/ApplicationService/src/Application.csproj",
+  "projectFilePath": "/home/hatelove/Desktop/projects/ApplicationService/src/Application/Application.csproj",
   "expectedPackageFiles": [],
   "logs": []
 }

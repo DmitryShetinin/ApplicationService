@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "/home/hatelove/Desktop/projects/ApplicationService/ApplicationService.csproj": {}
+    "/home/hatelove/Desktop/projects/ApplicationService/ApplicationService/ApplicationService.csproj": {}
   },
   "projects": {
-    "/home/hatelove/Desktop/projects/ApplicationService/ApplicationService.csproj": {
+    "/home/hatelove/Desktop/projects/ApplicationService/ApplicationService/ApplicationService.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "/home/hatelove/Desktop/projects/ApplicationService/ApplicationService.csproj",
+        "projectUniqueName": "/home/hatelove/Desktop/projects/ApplicationService/ApplicationService/ApplicationService.csproj",
         "projectName": "ApplicationService",
-        "projectPath": "/home/hatelove/Desktop/projects/ApplicationService/ApplicationService.csproj",
+        "projectPath": "/home/hatelove/Desktop/projects/ApplicationService/ApplicationService/ApplicationService.csproj",
         "packagesPath": "/home/hatelove/.nuget/packages/",
-        "outputPath": "/home/hatelove/Desktop/projects/ApplicationService/obj/",
+        "outputPath": "/home/hatelove/Desktop/projects/ApplicationService/ApplicationService/obj/",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "/home/hatelove/.nuget/NuGet/NuGet.Config"
