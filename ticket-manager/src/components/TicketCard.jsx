@@ -5,6 +5,7 @@ const STATUS_CLASS = { 1: 'status-new', 2: 'status-processing', 3: 'status-compl
 
 export default function TicketCard({ ticket, onMove, onDelete, onEdit, draggable = false, onDragStart }) {
   const [dragging, setDragging] = useState(false);
+
   const author = employees.find(e => e.id === ticket.authorId) || employees[0];
   const executor = employees.find(e => e.id === ticket.executorId) || employees[0];
   const deadlineClass = getDeadlineClass(ticket.deadline);

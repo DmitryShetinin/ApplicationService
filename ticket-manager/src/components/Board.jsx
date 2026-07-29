@@ -1,11 +1,9 @@
-import { useRef, useState, useCallback } from 'react';
+import { useRef } from 'react';
 import Column from './Column';
 import TicketCard from './TicketCard';
 
 export default function Board({ tickets, viewMode, onMove, onDelete, onEdit }) {
   const draggedTicketId = useRef(null);
-  const [dragOverStatus, setDragOverStatus] = useState(null);
-  const boardRef = useRef(null);
 
   const handleDragStart = (e, ticketId) => {
     draggedTicketId.current = ticketId;
@@ -13,39 +11,10 @@ export default function Board({ tickets, viewMode, onMove, onDelete, onEdit }) {
     e.dataTransfer.setData('text/plain', ticketId);
   };
 
-  const handleDragOver = useCallback((e) => {
-    e.preventDefault();
-    e.dataTransfer.dropEffect = 'move';
-    if (!boardRef.current || viewMode !== 'kanban') return;
-
-    const columns = boardRef.current.querySelectorAll('.column');
-    let newStatus = null;
-    columns.forEach(col => {
-      const rect = col.getBoundingClientRect();
-      if (
-        e.clientX >= rect.left &&
-        e.clientX <= rect.right &&
-        e.clientY >= rect.top &&
-        e.clientY <= rect.bottom
-      ) {
-        newStatus = parseInt(col.dataset.status, 10);
-      }
-    });
-    setDragOverStatus(newStatus);
-  }, [viewMode]);
-
-  const handleDrop = (e) => {
-    e.preventDefault();
+  const handleDrop = (e, status) => {
     const ticketId = e.dataTransfer.getData('text/plain') || draggedTicketId.current;
-    if (dragOverStatus && ticketId) {
-      onMove(ticketId, dragOverStatus);
-    }
-    setDragOverStatus(null);
+    if (ticketId) onMove(ticketId, status);
     draggedTicketId.current = null;
-  };
-
-  const handleDragEnd = () => {
-    setDragOverStatus(null);
   };
 
   if (viewMode === 'kanban') {
@@ -56,20 +25,14 @@ export default function Board({ tickets, viewMode, onMove, onDelete, onEdit }) {
     };
 
     return (
-      <div
-        className="board-container"
-        ref={boardRef}
-        onDragOver={handleDragOver}
-        onDrop={handleDrop}
-        onDragEnd={handleDragEnd}
-      >
+      <div className="board-container">
         {[1, 2, 3].map(status => (
           <Column
             key={status}
             status={status}
             tickets={columns[status]}
-            isDragOver={dragOverStatus === status}
             onDragStart={handleDragStart}
+            onDrop={handleDrop}
             onMove={onMove}
             onDelete={onDelete}
             onEdit={onEdit}
@@ -79,7 +42,7 @@ export default function Board({ tickets, viewMode, onMove, onDelete, onEdit }) {
     );
   }
 
-  // Сетка (без drag-and-drop)
+  // Сетка
   return (
     <div className="content">
       <div className="section-title">
