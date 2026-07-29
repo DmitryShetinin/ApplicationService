@@ -36,6 +36,24 @@ public sealed class Employee
     Department.Name = department;
   }
 
+  public static Employee Create(
+    FullName fullName,
+    Department department,
+    Position position)
+{
+    ArgumentNullException.ThrowIfNull(fullName);
+    ArgumentNullException.ThrowIfNull(department);
+    ArgumentNullException.ThrowIfNull(position);
+
+    return new Employee(
+        Guid.NewGuid(),
+        fullName,
+        department,
+        position);
+}
+
+
+
   public void ChangePosition(string position)
   {
     Position.Name = position;
