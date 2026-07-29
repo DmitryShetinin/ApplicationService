@@ -1,7 +1,9 @@
 
+using Application.Abstractions.Persistence;
 using Application.Features.Application;
 using Application.Features.Application.Requests;
 using Application.Features.Application.Responses;
+using Application.Features.Ticket.Requests;
 using Application.Interfaces;
 using Core.Enums;
 using Core.Models;
@@ -18,14 +20,15 @@ namespace Application.Receipts;
 
 public sealed class TicketService : ITicketService
 {
-  private readonly ITicketService _ticketService;
+  private readonly ITicketRepository _ticketRepository;
   private readonly IEmployeeRepository _employeeRepository;
 
 
   public TicketService(
-      ITicketService employeeRepository)
+      ITicketRepository ticketRepository, IEmployeeRepository employeeRepository)
   {
-    _ticketService = employeeRepository;
+    _ticketRepository = ticketRepository;
+    _employeeRepository = employeeRepository; 
  
   }
 
@@ -55,7 +58,7 @@ public sealed class TicketService : ITicketService
     }
 
 
-    var application = Ticket.Create (
+    var ticket = Ticket.Create (
         Guid.NewGuid(),
         request.Number,
         author,
@@ -67,8 +70,8 @@ public sealed class TicketService : ITicketService
       application.AssignExecutor(executor);
 
 
-    await _employeeApplicationRepository
-        .AddAsync(application, cancellationToken);
+    await  _ticketRepository
+        .AddAsync(ticket, cancellationToken);
 
 
     return application.Id;
@@ -76,12 +79,12 @@ public sealed class TicketService : ITicketService
 
 
   public async Task ChangeStatusAsync(
-      Guid applicationId,
+      Guid TaskId,
       TicketStatus newStatus,
       CancellationToken cancellationToken)
   {
-    var application = await _applicationRepository
-        .GetByIdAsync(applicationId, cancellationToken);
+    var application = await _ticketRepository
+        .GetByIdAsync(TaskId, cancellationToken);
 
     if (application is null)
       throw new Exception("Application not found");
@@ -90,17 +93,17 @@ public sealed class TicketService : ITicketService
     application.ChangeStatus(newStatus);
 
 
-    await _applicationRepository
+    await _ticketRepository
         .SaveChangesAsync(cancellationToken);
   }
 
-
+   
   public async Task AssignExecutorAsync(
       Guid applicationId,
       Guid executorId,
       CancellationToken cancellationToken)
   {
-    var application = await _applicationRepository
+    var application = await _ticketRepository
         .GetByIdAsync(applicationId, cancellationToken);
 
     var executor = await _employeeRepository
@@ -117,7 +120,7 @@ public sealed class TicketService : ITicketService
     application.AssignExecutor(executor);
 
 
-    await _applicationRepository
+    await _ticketRepository
         .SaveChangesAsync(cancellationToken);
   }
 
@@ -130,4 +133,5 @@ public sealed class TicketService : ITicketService
   {
     throw new NotImplementedException();
   }
+
 }
