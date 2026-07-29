@@ -105,7 +105,7 @@ public static Ticket Create(
 
   public TicketEvent MoveTo(
   TicketStatus next,
-  OperationStateMachine stateMachine)
+  TicketStateMachine stateMachine)
   {
     stateMachine.Validate(Status, next);
 
