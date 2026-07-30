@@ -1,4 +1,4 @@
-using Application.Features.Employee.Responses;
+using Application.Features.Employees.Responses;
 using Core.Models;
 
 namespace Application.Common.Extensions;

@@ -1,3 +1,7 @@
+using Application.Features.Application.Responses;
+using Application.Features.Employees.Responses;
+using Core.Models;
+
 public static class TicketMapping
 {
     public static TicketResponse ToResponse(
