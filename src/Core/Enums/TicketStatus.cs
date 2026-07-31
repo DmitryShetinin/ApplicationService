@@ -1,9 +1,9 @@
 namespace Core.Enums;
 
 
-public enum ApplicationStatus
+public enum TicketStatus
 {
-  Created = 1,
+  New = 1,
   Processing = 2,
   Completed = 3
 }

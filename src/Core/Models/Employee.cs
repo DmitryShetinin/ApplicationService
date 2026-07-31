@@ -31,10 +31,11 @@ public sealed class Employee
   public Guid PositionId { get; private set; }
   public Position Position { get; private set; } = null!;
 
-  public void ChangeDepartment(string department)
-  {
-    Department.Name = department;
-  }
+  public void ChangeDepartment(Department department)
+{
+    Department = department;
+    DepartmentId = department.Id;
+}
 
   public static Employee Create(
     FullName fullName,
@@ -54,9 +55,11 @@ public sealed class Employee
 
 
 
-  public void ChangePosition(string position)
+  public void ChangePosition(Position position)
   {
-    Position.Name = position;
+    Position = position;
+    PositionId = position.Id; 
+
   }
 }
 

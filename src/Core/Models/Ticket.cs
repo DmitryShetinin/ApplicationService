@@ -33,9 +33,11 @@ public sealed class Ticket
 
   public DateTime CreatedAt { get; private set; }
 
-  public Employee Author { get; private set; }
+  public Guid AuthorId { get; private set; }
+public Employee Author { get; private set; } = null!;
 
-  public Employee? Executor { get; private set; }
+public Guid? ExecutorId { get; private set; }
+public Employee? Executor { get; private set; }
 
   public string Description { get; private set; }
 
@@ -85,7 +87,7 @@ public static Ticket Create(
  
 
   public TicketEvent Complete(
-      OperationStateMachine stateMachine)
+      TicketStateMachine stateMachine)
   {
     return MoveTo(
         TicketStatus.Completed,
@@ -93,7 +95,7 @@ public static Ticket Create(
   }
 
   public TicketEvent Processing(
-       OperationStateMachine stateMachine)
+       TicketStateMachine stateMachine)
   {
     return MoveTo(
         TicketStatus.Processing,

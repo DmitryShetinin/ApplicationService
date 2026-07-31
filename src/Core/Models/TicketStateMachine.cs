@@ -2,38 +2,38 @@ using Core.Enums;
 
 namespace Core.Models
 {
-  public class OperationStateMachine
+  public class TicketStateMachine
   {
     private static readonly Dictionary<
-        ApplicationStatus,
-        HashSet<ApplicationStatus>>
+        TicketStatus,
+        HashSet<TicketStatus>>
         Transitions =
     new()
     {
         {
-            ApplicationStatus.Created,
+            TicketStatus.New,
             [
-                ApplicationStatus.Processing
+                TicketStatus.Processing
             ]
         },
 
         {
-            ApplicationStatus.Processing,
+            TicketStatus.Processing,
             [
-                ApplicationStatus.Completed,
+                TicketStatus.Completed,
             ]
         },
 
         {
-            ApplicationStatus.Completed,
+            TicketStatus.Completed,
             []
         }
     };
 
 
     public void Validate(
-        ApplicationStatus from,
-        ApplicationStatus to)
+        TicketStatus from,
+        TicketStatus to)
     {
       if (!Transitions[from]
           .Contains(to))

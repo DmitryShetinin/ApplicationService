@@ -1,7 +1,9 @@
-namespace Application.Features.Application.Requests;
+using Core.Enums;
 
-public sealed record ApplicationFilterRequest(
-ApplicationStatus? Status,
+namespace Application.Features.Tickets.Requests;
+
+public sealed record TicketFilterRequest(
+TicketStatus? Status,
 Guid? ExecutorId,
 Guid? DepartmentId,
 bool? OnlyOverdue);

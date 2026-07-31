@@ -1,10 +1,12 @@
 export const employees = [
-  { id: 'emp-1', name: 'Алексей Иванов', initials: 'АИ' },
-  { id: 'emp-2', name: 'Мария Петрова', initials: 'МП' },
-  { id: 'emp-3', name: 'Дмитрий Соколов', initials: 'ДС' },
-  { id: 'emp-4', name: 'Елена Кузнецова', initials: 'ЕК' },
-  { id: 'emp-5', name: 'Сергей Волков', initials: 'СВ' },
+  { id: 'emp-1', name: 'Алексей Иванов', initials: 'АИ', department: 'Разработка', position: 'Senior Developer' },
+  { id: 'emp-2', name: 'Мария Петрова', initials: 'МП', department: 'Дизайн', position: 'UX/UI Designer' },
+  { id: 'emp-3', name: 'Дмитрий Соколов', initials: 'ДС', department: 'Разработка', position: 'Junior Developer' },
+  { id: 'emp-4', name: 'Елена Кузнецова', initials: 'ЕК', department: 'Маркетинг', position: 'Marketing Lead' },
+  { id: 'emp-5', name: 'Сергей Волков', initials: 'СВ', department: 'Тестирование', position: 'QA Engineer' },
 ];
+
+export const departments = [...new Set(employees.map(e => e.department))];
 
 export function generateId() {
   return 'ticket-' + crypto.randomUUID().split('-')[0];
@@ -12,7 +14,7 @@ export function generateId() {
 
 export function formatDate(date) {
   const d = new Date(date);
-  return `${String(d.getDate()).padStart(2, '0')}.${String(d.getMonth()+1).padStart(2, '0')}.${d.getFullYear()} ${String(d.getHours()).padStart(2, '0')}:${String(d.getMinutes()).padStart(2, '0')}`;
+  return `${String(d.getDate()).padStart(2, '0')}.${String(d.getMonth() + 1).padStart(2, '0')}.${d.getFullYear()} ${String(d.getHours()).padStart(2, '0')}:${String(d.getMinutes()).padStart(2, '0')}`;
 }
 
 export function getDeadlineClass(deadlineStr) {

@@ -1,137 +1,202 @@
-
 using Application.Abstractions.Persistence;
-using Application.Features.Application;
-using Application.Features.Application.Requests;
-using Application.Features.Application.Responses;
-using Application.Features.Ticket.Requests;
+using Application.Common;
+
+ 
+using Application.Features.Tickets.Requests;
+using Application.Features.Tickets.Responses;
 using Application.Interfaces;
 using Core.Enums;
 using Core.Models;
 
-
-
-
-
-
-
-
-namespace Application.Receipts;
-
+namespace Application.Features.Tickets;
 
 public sealed class TicketService : ITicketService
 {
-  private readonly ITicketRepository _ticketRepository;
-  private readonly IEmployeeRepository _employeeRepository;
+    private readonly ITicketRepository _ticketRepository;
+    private readonly IEmployeeRepository _employeeRepository;
+    private readonly TicketStateMachine _stateMachine;
 
 
-  public TicketService(
-      ITicketRepository ticketRepository, IEmployeeRepository employeeRepository)
-  {
-    _ticketRepository = ticketRepository;
-    _employeeRepository = employeeRepository; 
- 
-  }
-
- 
-  public async Task<Guid> CreateAsync(
-      CreateTicketRequest request,
-      CancellationToken cancellationToken)
-  {
-    var author = await _employeeRepository
-        .GetByIdAsync(request.AuthorId, cancellationToken);
-
-    if (author is null)
-      throw new Exception("Author not found");
-
-
-    Employee? executor = null;
-
-    if (request.ExecutorId.HasValue)
+    public TicketService(
+        ITicketRepository ticketRepository,
+        IEmployeeRepository employeeRepository,
+        TicketStateMachine stateMachine)
     {
-      executor = await _employeeRepository
-          .GetByIdAsync(
-              request.ExecutorId.Value,
-              cancellationToken);
-
-      if (executor is null)
-        throw new Exception("Executor not found");
+        _ticketRepository = ticketRepository;
+        _employeeRepository = employeeRepository;
+        _stateMachine = stateMachine;
     }
 
 
-    var ticket = Ticket.Create (
-        Guid.NewGuid(),
-        request.Number,
-        author,
-        request.Description,
-        request.Deadline);
+    public async Task<Result<Guid>> CreateAsync(
+        CreateTicketRequest request,
+        CancellationToken cancellationToken)
+    {
+        var author =
+            await _employeeRepository.GetByIdAsync(
+                request.AuthorId,
+                cancellationToken);
 
 
-    if (executor != null)
-      application.AssignExecutor(executor);
+        if (author is null)
+        {
+            return Result<Guid>.Failure(
+                "Author not found");
+        }
 
 
-    await  _ticketRepository
-        .AddAsync(ticket, cancellationToken);
+        Employee? executor = null;
 
 
-    return application.Id;
-  }
+      
 
 
-  public async Task ChangeStatusAsync(
-      Guid TaskId,
-      TicketStatus newStatus,
-      CancellationToken cancellationToken)
-  {
-    var application = await _ticketRepository
-        .GetByIdAsync(TaskId, cancellationToken);
-
-    if (application is null)
-      throw new Exception("Application not found");
+        var ticket = Ticket.Create(
+                request.Number,
+                author,
+                executor,
+                request.Description,
+                request.Deadline);
 
 
-    application.ChangeStatus(newStatus);
+        await _ticketRepository.AddAsync(
+            ticket,
+            cancellationToken);
 
 
-    await _ticketRepository
-        .SaveChangesAsync(cancellationToken);
-  }
-
-   
-  public async Task AssignExecutorAsync(
-      Guid applicationId,
-      Guid executorId,
-      CancellationToken cancellationToken)
-  {
-    var application = await _ticketRepository
-        .GetByIdAsync(applicationId, cancellationToken);
-
-    var executor = await _employeeRepository
-        .GetByIdAsync(executorId, cancellationToken);
+        await _ticketRepository.SaveChangesAsync(
+            cancellationToken);
 
 
-    if (application is null)
-      throw new Exception("Application not found");
-
-    if (executor is null)
-      throw new Exception("Employee not found");
+        return Result<Guid>.Success(
+            ticket.Id);
+    }
 
 
-    application.AssignExecutor(executor);
+
+   public async Task<Result<bool>> ChangeStatusAsync(
+    Guid ticketId,
+    TicketStatus newStatus,
+    CancellationToken cancellationToken)
+{
+    var ticket =
+        await _ticketRepository.GetByIdAsync(
+            ticketId,
+            cancellationToken);
 
 
-    await _ticketRepository
-        .SaveChangesAsync(cancellationToken);
-  }
+    if (ticket is null)
+    {
+        return Result<bool>.Failure(
+            "Ticket not found");
+    }
 
-  public Task<TicketResponse?> GetByIdAsync(Guid applicationId, CancellationToken cancellationToken)
-  {
-    throw new NotImplementedException();
-  }
 
-  public Task<IReadOnlyCollection<TicketResponse>> GetAsync(TicketFilterRequest filter, CancellationToken cancellationToken)
-  {
-    throw new NotImplementedException();
-  }
+    try
+    {
+        ticket.MoveTo(
+            newStatus,
+            _stateMachine);
+    }
+    catch (InvalidOperationException ex)
+    {
+        return Result<bool>.Failure(
+            ex.Message);
+    }
 
+
+    await _ticketRepository.SaveChangesAsync(
+        cancellationToken);
+
+
+    return Result<bool>.Success(true);
+}
+
+
+
+    public async Task<Result<bool>> AssignExecutorAsync(
+        Guid ticketId,
+        Guid executorId,
+        CancellationToken cancellationToken)
+    {
+        var ticket =
+            await _ticketRepository.GetByIdAsync(
+                ticketId,
+                cancellationToken);
+
+
+        if (ticket is null)
+        {
+            return Result<bool>.Failure(
+                "Ticket not found");
+        }
+
+
+        var executor =
+            await _employeeRepository.GetByIdAsync(
+                executorId,
+                cancellationToken);
+
+
+        if (executor is null)
+        {
+            return Result<bool>.Failure(
+                "Employee not found");
+        }
+
+
+        ticket.AssignExecutor(executor);
+
+
+        await _ticketRepository.SaveChangesAsync(
+            cancellationToken);
+
+
+        return Result<bool>.Success(true);
+    }
+
+
+
+    public async Task<Result<TicketResponse>> GetByIdAsync(
+        Guid ticketId,
+        CancellationToken cancellationToken)
+    {
+        var ticket =
+            await _ticketRepository.GetByIdAsync(
+                ticketId,
+                cancellationToken);
+
+
+        if (ticket is null)
+        {
+            return Result<TicketResponse>.Failure(
+                "Ticket not found");
+        }
+
+
+        return Result<TicketResponse>.Success(
+            ticket.ToResponse());
+    }
+
+
+
+    public async Task<Result<IReadOnlyCollection<TicketResponse>>> GetAsync(
+        TicketFilterRequest filter,
+        CancellationToken cancellationToken)
+    {
+        var tickets =
+            await _ticketRepository.GetAsync(
+                filter,
+                cancellationToken);
+
+
+        var response =
+            tickets
+                .Select(ticket => ticket.ToResponse())
+                .ToArray();
+
+
+        return Result<IReadOnlyCollection<TicketResponse>>
+            .Success(response);
+    }
 }

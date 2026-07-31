@@ -1,6 +1,6 @@
 namespace Core.ValueObjects;
 
-public class Position
+public sealed class Position
 {
 
 
