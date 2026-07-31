@@ -1,6 +1,6 @@
 namespace Core.ValueObjects;
 
-public class Department
+public sealed class Department
 {
 
   private Department() { }

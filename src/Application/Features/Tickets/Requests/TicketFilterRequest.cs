@@ -1,6 +1,6 @@
 using Core.Enums;
 
-namespace Application.Features.Application.Requests;
+namespace Application.Features.Tickets.Requests;
 
 public sealed record TicketFilterRequest(
 TicketStatus? Status,

@@ -1,26 +1,26 @@
 using Application.Abstractions.Persistence;
 using Application.Common;
-using Application.Features.Application;
-using Application.Features.Application.Requests;
-using Application.Features.Application.Responses;
-using Application.Features.Ticket.Requests;
+
+ 
+using Application.Features.Tickets.Requests;
+using Application.Features.Tickets.Responses;
 using Application.Interfaces;
 using Core.Enums;
 using Core.Models;
 
-
-namespace Application.Receipts;
-
+namespace Application.Features.Tickets;
 
 public sealed class TicketService : ITicketService
 {
     private readonly ITicketRepository _ticketRepository;
     private readonly IEmployeeRepository _employeeRepository;
-    private readonly TicketStateMachine _stateMachine; 
+    private readonly TicketStateMachine _stateMachine;
+
 
     public TicketService(
         ITicketRepository ticketRepository,
-        IEmployeeRepository employeeRepository, TicketStateMachine stateMachine)
+        IEmployeeRepository employeeRepository,
+        TicketStateMachine stateMachine)
     {
         _ticketRepository = ticketRepository;
         _employeeRepository = employeeRepository;
@@ -28,13 +28,12 @@ public sealed class TicketService : ITicketService
     }
 
 
-
     public async Task<Result<Guid>> CreateAsync(
         CreateTicketRequest request,
         CancellationToken cancellationToken)
     {
-        var author = await _employeeRepository
-            .GetByIdAsync(
+        var author =
+            await _employeeRepository.GetByIdAsync(
                 request.AuthorId,
                 cancellationToken);
 
@@ -49,34 +48,24 @@ public sealed class TicketService : ITicketService
         Employee? executor = null;
 
 
-        if (request.ExecutorId.HasValue)
-        {
-            executor = await _employeeRepository
-                .GetByIdAsync(
-                    request.ExecutorId.Value,
-                    cancellationToken);
-
-
-            if (executor is null)
-            {
-                return Result<Guid>.Failure(
-                    "Executor not found");
-            }
-        }
+      
 
 
         var ticket = Ticket.Create(
-            request.Number,
-            author,
-            executor,
-            request.Description,
-            request.Deadline);
+                request.Number,
+                author,
+                executor,
+                request.Description,
+                request.Deadline);
 
 
-        await _ticketRepository
-            .AddAsync(
-                ticket,
-                cancellationToken);
+        await _ticketRepository.AddAsync(
+            ticket,
+            cancellationToken);
+
+
+        await _ticketRepository.SaveChangesAsync(
+            cancellationToken);
 
 
         return Result<Guid>.Success(
@@ -85,63 +74,73 @@ public sealed class TicketService : ITicketService
 
 
 
-    public async Task<Result> ChangeStatusAsync(
-        Guid ticketId,
-        TicketStatus newStatus,
-        CancellationToken cancellationToken)
+   public async Task<Result<bool>> ChangeStatusAsync(
+    Guid ticketId,
+    TicketStatus newStatus,
+    CancellationToken cancellationToken)
+{
+    var ticket =
+        await _ticketRepository.GetByIdAsync(
+            ticketId,
+            cancellationToken);
+
+
+    if (ticket is null)
     {
-        var ticket = await _ticketRepository
-            .GetByIdAsync(
-                ticketId,
-                cancellationToken);
-
-
-        if (ticket is null)
-        {
-            return Result.Failure(
-                "Ticket not found");
-        }
-
-
-        ticket.MoveTo(newStatus, _stateMachine);
-
-
-        await _ticketRepository
-            .SaveChangesAsync(cancellationToken);
-
-
-        return Result.Success();
+        return Result<bool>.Failure(
+            "Ticket not found");
     }
 
 
+    try
+    {
+        ticket.MoveTo(
+            newStatus,
+            _stateMachine);
+    }
+    catch (InvalidOperationException ex)
+    {
+        return Result<bool>.Failure(
+            ex.Message);
+    }
 
-    public async Task<Result> AssignExecutorAsync(
+
+    await _ticketRepository.SaveChangesAsync(
+        cancellationToken);
+
+
+    return Result<bool>.Success(true);
+}
+
+
+
+    public async Task<Result<bool>> AssignExecutorAsync(
         Guid ticketId,
         Guid executorId,
         CancellationToken cancellationToken)
     {
-        var ticket = await _ticketRepository
-            .GetByIdAsync(
+        var ticket =
+            await _ticketRepository.GetByIdAsync(
                 ticketId,
                 cancellationToken);
 
 
         if (ticket is null)
         {
-            return Result.Failure(
+            return Result<bool>.Failure(
                 "Ticket not found");
         }
 
 
-        var executor = await _employeeRepository
-            .GetByIdAsync(
+        var executor =
+            await _employeeRepository.GetByIdAsync(
                 executorId,
                 cancellationToken);
 
 
         if (executor is null)
         {
-            return Result.Failure(
+            return Result<bool>.Failure(
                 "Employee not found");
         }
 
@@ -149,11 +148,11 @@ public sealed class TicketService : ITicketService
         ticket.AssignExecutor(executor);
 
 
-        await _ticketRepository
-            .SaveChangesAsync(cancellationToken);
+        await _ticketRepository.SaveChangesAsync(
+            cancellationToken);
 
 
-        return Result.Success();
+        return Result<bool>.Success(true);
     }
 
 
@@ -162,8 +161,8 @@ public sealed class TicketService : ITicketService
         Guid ticketId,
         CancellationToken cancellationToken)
     {
-        var ticket = await _ticketRepository
-            .GetByIdAsync(
+        var ticket =
+            await _ticketRepository.GetByIdAsync(
                 ticketId,
                 cancellationToken);
 
@@ -185,20 +184,19 @@ public sealed class TicketService : ITicketService
         TicketFilterRequest filter,
         CancellationToken cancellationToken)
     {
-        var tickets = await _ticketRepository
-            .GetAsync(
+        var tickets =
+            await _ticketRepository.GetAsync(
                 filter,
                 cancellationToken);
 
 
-        var response = tickets
-            .Select(x => x.ToResponse())
-            .ToArray();
+        var response =
+            tickets
+                .Select(ticket => ticket.ToResponse())
+                .ToArray();
 
 
         return Result<IReadOnlyCollection<TicketResponse>>
             .Success(response);
     }
-
-
 }

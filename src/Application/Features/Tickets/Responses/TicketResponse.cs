@@ -1,13 +1,15 @@
+using Application.Features.Employees.Responses;
+using Core.Enums;
 using Core.Models;
 
-namespace Application.Features.Application.Responses;
+namespace Application.Features.Tickets.Responses;
 
 public sealed record TicketResponse(
 Guid Id,
 int Number,
-Employee AuthorName,
-Employee? ExecutorName,
+EmployeeResponse AuthorName,
+EmployeeResponse? ExecutorName,
 string Description,
 DateTime CreatedAt,
 DateTime Deadline,
-TicketEvent Status);
+TicketStatus Status);

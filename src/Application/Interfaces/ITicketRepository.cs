@@ -1,4 +1,5 @@
-using Application.Features.Application.Requests;
+
+using Application.Features.Tickets.Requests;
 using Core.Models;
 
 namespace Application.Interfaces

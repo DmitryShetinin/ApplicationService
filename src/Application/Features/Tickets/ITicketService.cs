@@ -1,14 +1,9 @@
 using Application.Common;
-using Application.Features.Application.Requests;
-using Application.Features.Application.Responses;
-using Application.Features.Ticket.Requests;
- 
+using Application.Features.Tickets.Requests;
+using Application.Features.Tickets.Responses;
 using Core.Enums;
 
-
-
-
-namespace Application.Features.Application;
+namespace Application.Features.Tickets;
 
 public interface ITicketService
 {
@@ -17,13 +12,13 @@ public interface ITicketService
         CancellationToken cancellationToken);
 
 
-    Task<Result> ChangeStatusAsync(
+    Task<Result<bool>> ChangeStatusAsync(
         Guid ticketId,
         TicketStatus newStatus,
         CancellationToken cancellationToken);
 
 
-    Task<Result> AssignExecutorAsync(
+    Task<Result<bool>> AssignExecutorAsync(
         Guid ticketId,
         Guid executorId,
         CancellationToken cancellationToken);
