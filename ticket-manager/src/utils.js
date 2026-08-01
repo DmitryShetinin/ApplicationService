@@ -1,10 +1,39 @@
-export const employees = [
-  { id: 'emp-1', name: 'Алексей Иванов', initials: 'АИ', department: 'Разработка', position: 'Senior Developer' },
-  { id: 'emp-2', name: 'Мария Петрова', initials: 'МП', department: 'Дизайн', position: 'UX/UI Designer' },
-  { id: 'emp-3', name: 'Дмитрий Соколов', initials: 'ДС', department: 'Разработка', position: 'Junior Developer' },
-  { id: 'emp-4', name: 'Елена Кузнецова', initials: 'ЕК', department: 'Маркетинг', position: 'Marketing Lead' },
-  { id: 'emp-5', name: 'Сергей Волков', initials: 'СВ', department: 'Тестирование', position: 'QA Engineer' },
-];
+
+const API_URL = "http://localhost:5353/api/employees";
+
+function getInitials(fullName) {
+  return fullName
+    .split(" ")
+    .filter(Boolean)
+    .map(x => x[0].toUpperCase())
+    .join("");
+}
+
+export async function getEmployees() {
+  const response = await fetch(API_URL);
+  console.log(1)
+  if (!response.ok) {
+    throw new Error("Не удалось получить сотрудников");
+  }
+
+  const employees = await response.json();
+  console.log(employees)
+  return employees.map(employee => ({
+    id: employee.id,
+    name: employee.fullName,
+    initials: getInitials(employee.fullName),
+
+    departmentId: employee.departmentId,
+    department: employee.department,
+
+    positionId: employee.positionId,
+    position: employee.position
+  }));
+}
+
+export const employees = await getEmployees();
+
+
 
 export const departments = [...new Set(employees.map(e => e.department))];
 
@@ -35,3 +64,43 @@ export function getDeadlineLabel(deadlineStr) {
   if (diffDays === 1) return 'Завтра';
   return `Через ${diffDays} дн.`;
 }
+
+
+export async function changeTicketExecutor(ticketId, executorId) {
+      const response = await fetch(
+          `${API_URL}/${ticketId}/executor`,
+          {
+              method: "PATCH",
+              headers: {
+                  "Content-Type": "application/json"
+              },
+              body: JSON.stringify({
+                  executorId
+              })
+          });
+
+      if (!response.ok) {
+          const error = await response.text();
+          throw new Error(error);
+      }
+  }
+
+  export async function changeTicketStatus(ticketId, status) {
+      const response = await fetch(
+          `${API_URL}/${ticketId}/status`,
+          {
+              method: "PATCH",
+              headers: {
+                  "Content-Type": "application/json"
+              },
+              body: JSON.stringify({
+                  status
+              })
+          });
+
+      if (!response.ok) {
+          const error = await response.text();
+          throw new Error(error);
+      }
+  }
+  

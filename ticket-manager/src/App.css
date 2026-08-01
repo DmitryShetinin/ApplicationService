@@ -127,8 +127,13 @@ body {
 .column-body::-webkit-scrollbar { width:4px; }
 .column-body::-webkit-scrollbar-thumb { background:var(--border); border-radius:4px; }
 .drop-zone {
-  flex:1; min-height:60px; border-radius:var(--radius-sm);
-  transition:var(--transition); display:flex; flex-direction:column; gap:10px;
+  flex:1; height:100%; border-radius:var(--radius-sm);
+ 
+  display:flex; 
+  
+  flex-direction:
+  
+  column; gap:10px;
 }
 .empty-state {
   text-align:center; padding:30px 16px; color:var(--text3);
@@ -413,18 +418,17 @@ body {
   display: inline-block; padding: 4px 10px; border-radius: 12px;
   font-weight: 600; font-size: 13px;
 }
-.badge-blue { background: #3b82f61a; color: #3b82f6; }
-.badge-orange { background: #f59e0b1a; color: #f59e0b; }
-.badge-green { background: #10b9811a; color: #10b981; }
-.badge-red { background: #ef44441a; color: #ef4444; }
+ 
 
-.btn-download {
-  background: var(--accent); color: #fff; margin-top: 20px;
-  padding: 10px 24px; border-radius: var(--radius-xs); border: none;
-  font-weight: 600; cursor: pointer; transition: var(--transition);
-  font-family: inherit; font-size: 14px;
+ 
+/* Убираем любые обводки у колонок (фокус, активность, drag-over) */
+ 
+
+.drag-allowed {
+    border: 2px solid #22c55e;
 }
-.btn-download:hover {
-  background: var(--accent-hover);
-  box-shadow: 0 4px 16px rgba(99,102,241,0.35);
+
+.drag-denied {
+    border: 2px solid #ef4444;
+    background: rgba(239,68,68,.08);
 }
