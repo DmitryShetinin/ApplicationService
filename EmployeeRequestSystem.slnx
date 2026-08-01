@@ -3,6 +3,7 @@
     <Project Path="src/Application/Application.csproj" />
     <Project Path="src/Core/Core.csproj" />
     <Project Path="src/Infrastructure/Infrastructure.csproj" />
+    <Project Path="src/WebApi/WebApi.csproj" />
   </Folder>
   <Project Path="ApplicationService/ApplicationService.csproj" />
 </Solution>

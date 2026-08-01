@@ -4,6 +4,7 @@ import Modal from './components/Modal';
 import Toast from './components/Toast';
 import Report from './components/Report';
 import { employees } from './utils';
+import { HubConnectionBuilder } from "@microsoft/signalr";
 import { changeTicketExecutor, changeTicketStatus } from './api.js';
 
 const STATUS = { New: 1, Processing: 2, Completed: 3 };
@@ -20,6 +21,62 @@ export default function App() {
   const [filterExecutor, setFilterExecutor] = useState('');
   const [filterDepartment, setFilterDepartment] = useState('');
   const [filterOverdue, setFilterOverdue] = useState(false);
+
+
+
+  const [connection, setConnection] = useState(null);
+
+
+  useEffect(() => {
+
+    const connection =
+      new HubConnectionBuilder()
+        .withUrl(
+          "http://localhost:5353/hubs/tickets"
+        )
+        .withAutomaticReconnect()
+        .build();
+
+
+    connection.on(
+      "TicketUpdated",
+      (ticketId) => {
+
+        console.log(
+          "Ticket updated:",
+          ticketId
+        );
+
+
+        loadTickets();
+
+      }
+    );
+
+
+    async function start() {
+
+      await connection.start();
+
+      console.log(
+        "SignalR connected"
+      );
+
+    }
+
+
+    start();
+
+
+    return () => {
+
+      connection.stop();
+
+    };
+
+
+  }, []);
+
 
   const addToast = useCallback((message, type = "info") => {
     const id = Date.now();
