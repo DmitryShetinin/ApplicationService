@@ -36,6 +36,49 @@
           }
         }
       },
+      "Mapster/10.0.11": {
+        "dependencies": {
+          "Mapster.Core": "10.0.11"
+        },
+        "runtime": {
+          "lib/net10.0/Mapster.dll": {
+            "assemblyVersion": "10.0.11.0",
+            "fileVersion": "10.0.11.0"
+          }
+        }
+      },
+      "Mapster.Core/10.0.11": {
+        "runtime": {
+          "lib/netstandard2.0/Mapster.Core.dll": {
+            "assemblyVersion": "10.0.11.0",
+            "fileVersion": "10.0.11.0"
+          }
+        }
+      },
+      "Mapster.DependencyInjection/10.0.11": {
+        "dependencies": {
+          "Mapster": "10.0.11",
+          "Microsoft.Extensions.DependencyInjection.Abstractions": "10.0.10"
+        },
+        "runtime": {
+          "lib/net10.0/Mapster.DependencyInjection.dll": {
+            "assemblyVersion": "10.0.11.0",
+            "fileVersion": "10.0.11.0"
+          }
+        }
+      },
+      "Mapster.EFCore/10.0.11": {
+        "dependencies": {
+          "Mapster": "10.0.11",
+          "Microsoft.EntityFrameworkCore": "10.0.10"
+        },
+        "runtime": {
+          "lib/net10.0/Mapster.EFCore.dll": {
+            "assemblyVersion": "10.0.11.0",
+            "fileVersion": "10.0.11.0"
+          }
+        }
+      },
       "Microsoft.Build.Framework/18.0.2": {
         "runtime": {
           "lib/net10.0/Microsoft.Build.Framework.dll": {
@@ -646,7 +689,11 @@
       },
       "Application/1.0.0": {
         "dependencies": {
-          "Core": "1.0.0"
+          "Core": "1.0.0",
+          "Mapster": "10.0.11",
+          "Mapster.DependencyInjection": "10.0.11",
+          "Mapster.EFCore": "10.0.11",
+          "Microsoft.Extensions.Options.ConfigurationExtensions": "10.0.10"
         },
         "runtime": {
           "Application.dll": {
@@ -684,6 +731,34 @@
       "sha512": "sha512-lQKvtaTDOXnoVJ20ibTuSIOf2i0uO0MPbDhd1jm238I+U/2ZnRENj0cktKZhtchBMtCUSRQ5v4xBCUbKNmyVMw==",
       "path": "humanizer.core/2.14.1",
       "hashPath": "humanizer.core.2.14.1.nupkg.sha512"
+    },
+    "Mapster/10.0.11": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-MesrjeIg4lyaxJKVFHysc1GH4TooIuuY/RJRCgBPoFwDD3D1tngF362cKBkxhxR/8EhpfMfGLeU4nzCEz6hPaQ==",
+      "path": "mapster/10.0.11",
+      "hashPath": "mapster.10.0.11.nupkg.sha512"
+    },
+    "Mapster.Core/10.0.11": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-vpChY4hsk+CvIR3AFN/uQJkkP6gwYSUZFnuqgWBiTTbThbFEnB6chP7QUoSWZBcuPAnOjol09Ev7F1PVwECAIg==",
+      "path": "mapster.core/10.0.11",
+      "hashPath": "mapster.core.10.0.11.nupkg.sha512"
+    },
+    "Mapster.DependencyInjection/10.0.11": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-rdvpA2xSZ8Eyd3hGedz/23oXl07tM+cmPgxlWOOAnAX1LmRl42qtbpu8LFCOEq5Hh66MjdIEg5rj4+HcajTO6w==",
+      "path": "mapster.dependencyinjection/10.0.11",
+      "hashPath": "mapster.dependencyinjection.10.0.11.nupkg.sha512"
+    },
+    "Mapster.EFCore/10.0.11": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-qVku94t41cCN0YS6GPPBRZRNU/vk+caeMW3k/awJ/rknTfSaBVAACgMVWkl234Eo5VEbZ5Nfi8KPPF224+XMpg==",
+      "path": "mapster.efcore/10.0.11",
+      "hashPath": "mapster.efcore.10.0.11.nupkg.sha512"
     },
     "Microsoft.Build.Framework/18.0.2": {
       "type": "package",

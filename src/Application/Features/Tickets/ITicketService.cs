@@ -24,12 +24,9 @@ public interface ITicketService
         CancellationToken cancellationToken);
 
 
-    Task<Result<TicketResponse>> GetByIdAsync(
-        Guid ticketId,
-        CancellationToken cancellationToken);
+     
 
 
-    Task<Result<IReadOnlyCollection<TicketResponse>>> GetAsync(
-        TicketFilterRequest filter,
-        CancellationToken cancellationToken);
+ 
+        
 }

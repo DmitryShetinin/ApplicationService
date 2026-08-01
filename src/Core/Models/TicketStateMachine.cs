@@ -1,46 +1,69 @@
 using Core.Enums;
+using Core.ValueObjects;
 
-namespace Core.Models
+namespace Core.Models;
+
+public sealed class TicketStateMachine
 {
-  public class TicketStateMachine
-  {
-    private static readonly Dictionary<
+    private static readonly IReadOnlyDictionary<
         TicketStatus,
-        HashSet<TicketStatus>>
+        IReadOnlyCollection<TicketTransition>>
         Transitions =
-    new()
-    {
-        {
-            TicketStatus.New,
-            [
-                TicketStatus.Processing
-            ]
-        },
+            new Dictionary<TicketStatus,IReadOnlyCollection<TicketTransition>>
+            {
+                {
+                    TicketStatus.New,
+                    [
+                        new(
+                            TicketStatus.Processing,
+                            "Начать работу")
+                    ]
+                },
 
-        {
-            TicketStatus.Processing,
-            [
-                TicketStatus.Completed,
-            ]
-        },
+                {
+                    TicketStatus.Processing,
+                    [
+                        new(
+                            TicketStatus.Completed,
+                            "Завершить")
+                    ]
+                },
 
-        {
-            TicketStatus.Completed,
-            []
-        }
-    };
+                {
+                    TicketStatus.Completed,
+                    []
+                }
+            };
 
 
     public void Validate(
         TicketStatus from,
         TicketStatus to)
     {
-      if (!Transitions[from]
-          .Contains(to))
-      {
-        throw new InvalidOperationException(
-            $"Transition {from} -> {to} is forbidden");
-      }
+        if (!CanTransition(from, to))
+        {
+            throw new InvalidOperationException(
+                $"Transition {from} -> {to} is forbidden");
+        }
     }
-  }
+
+
+    public bool CanTransition(
+        TicketStatus from,
+        TicketStatus to)
+    {
+        return GetAllowedTransitions(from)
+            .Any(x => x.Status == to);
+    }
+
+
+    public IReadOnlyCollection<TicketTransition> GetAllowedTransitions(
+        TicketStatus status)
+    {
+        return Transitions.TryGetValue(
+            status,
+            out var transitions)
+                ? transitions
+                : [];
+    }
 }

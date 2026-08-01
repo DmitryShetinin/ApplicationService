@@ -1,5 +1,6 @@
 using Application.Features.Tickets;
 using Application.Features.Tickets.Requests;
+using Application.Queries;
 using Core.Enums;
 using Microsoft.AspNetCore.Mvc;
 
@@ -17,12 +18,13 @@ public sealed record ChangeTicketStatusRequest(
 public sealed class TicketsController : ControllerBase
 {
     private readonly ITicketService _ticketService;
-
+    private readonly ITicketQueries _ticketQueries; 
 
     public TicketsController(
-        ITicketService ticketService)
+        ITicketService ticketService, ITicketQueries ticketQueries)
     {
         _ticketService = ticketService;
+        _ticketQueries = ticketQueries;
     }
 
 
@@ -65,7 +67,7 @@ public sealed class TicketsController : ControllerBase
         CancellationToken cancellationToken)
     {
         var result =
-            await _ticketService.GetByIdAsync(
+            await _ticketQueries.GetByIdAsync(
                 id,
                 cancellationToken);
 
@@ -89,7 +91,7 @@ public sealed class TicketsController : ControllerBase
         CancellationToken cancellationToken)
     {
         var result =
-            await _ticketService.GetAsync(
+            await _ticketQueries.GetAsync(
                 filter,
                 cancellationToken);
 

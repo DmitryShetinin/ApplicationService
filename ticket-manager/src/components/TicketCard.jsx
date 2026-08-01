@@ -15,7 +15,12 @@ export default function TicketCard({ ticket, onMove, onDelete, onEdit, draggable
     setDragging(true);
     e.dataTransfer.effectAllowed = 'move';
     e.dataTransfer.setData('text/plain', ticket.id);
-    if (onDragStart) onDragStart(e, ticket.id);
+     
+
+
+      if (onDragStart) {
+    onDragStart(ticket);
+}
   };
 
   const handleDragEnd = () => {

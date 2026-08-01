@@ -33,11 +33,14 @@ public sealed class EmployeeConfiguration
         builder.HasOne(x => x.Department)
             .WithMany()
             .HasForeignKey(x => x.DepartmentId)
+            .IsRequired()
             .OnDelete(DeleteBehavior.Restrict);
+
 
         builder.HasOne(x => x.Position)
             .WithMany()
             .HasForeignKey(x => x.PositionId)
+            .IsRequired()
             .OnDelete(DeleteBehavior.Restrict);
     }
 }
