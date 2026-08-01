@@ -161,3 +161,6 @@
 /home/hatelove/Desktop/projects/ApplicationService/ApplicationService/bin/Debug/net10.0/tr/Microsoft.CodeAnalysis.Workspaces.MSBuild.resources.dll
 /home/hatelove/Desktop/projects/ApplicationService/ApplicationService/bin/Debug/net10.0/zh-Hans/Microsoft.CodeAnalysis.Workspaces.MSBuild.resources.dll
 /home/hatelove/Desktop/projects/ApplicationService/ApplicationService/bin/Debug/net10.0/zh-Hant/Microsoft.CodeAnalysis.Workspaces.MSBuild.resources.dll
+/home/hatelove/Desktop/projects/ApplicationService/ApplicationService/bin/Debug/net10.0/Swashbuckle.AspNetCore.Swagger.dll
+/home/hatelove/Desktop/projects/ApplicationService/ApplicationService/bin/Debug/net10.0/Swashbuckle.AspNetCore.SwaggerUI.dll
+/home/hatelove/Desktop/projects/ApplicationService/ApplicationService/bin/Debug/net10.0/Swashbuckle.AspNetCore.SwaggerGen.dll
