@@ -8,7 +8,10 @@ export default function Board({
   viewMode,
   onMove,
   onDelete,
-  onEdit
+  onEdit,
+  page,
+  totalPages,
+  onPageChange
 }) {
 
   const [draggedTicket, setDraggedTicket] = useState(null);
@@ -52,7 +55,7 @@ export default function Board({
   };
 
 
-  if(viewMode === "kanban") {
+  if (viewMode === "kanban") {
 
     const columns = {
       1: tickets.filter(t => t.status === 1),
@@ -64,7 +67,7 @@ export default function Board({
     return (
       <div className="board-container">
 
-        {[1,2,3].map(status => (
+        {[1, 2, 3].map(status => (
 
           <Column
             key={status}
@@ -103,6 +106,28 @@ export default function Board({
 
         ))
       }
+
+      {viewMode === "grid" && totalPages > 1 && (
+        <div className="pagination">
+          <button
+            disabled={page === 1}
+            onClick={() => onPageChange(page - 1)}
+          >
+            ←
+          </button>
+
+          <span>
+            {page} / {totalPages}
+          </span>
+
+          <button
+            disabled={page === totalPages}
+            onClick={() => onPageChange(page + 1)}
+          >
+            →
+          </button>
+        </div>
+      )}
 
     </div>
   );

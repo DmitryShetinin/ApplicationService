@@ -164,3 +164,7 @@
 /home/hatelove/Desktop/projects/ApplicationService/ApplicationService/bin/Debug/net10.0/Swashbuckle.AspNetCore.Swagger.dll
 /home/hatelove/Desktop/projects/ApplicationService/ApplicationService/bin/Debug/net10.0/Swashbuckle.AspNetCore.SwaggerUI.dll
 /home/hatelove/Desktop/projects/ApplicationService/ApplicationService/bin/Debug/net10.0/Swashbuckle.AspNetCore.SwaggerGen.dll
+/home/hatelove/Desktop/projects/ApplicationService/ApplicationService/bin/Debug/net10.0/Mapster.dll
+/home/hatelove/Desktop/projects/ApplicationService/ApplicationService/bin/Debug/net10.0/Mapster.Core.dll
+/home/hatelove/Desktop/projects/ApplicationService/ApplicationService/bin/Debug/net10.0/Mapster.DependencyInjection.dll
+/home/hatelove/Desktop/projects/ApplicationService/ApplicationService/bin/Debug/net10.0/Mapster.EFCore.dll

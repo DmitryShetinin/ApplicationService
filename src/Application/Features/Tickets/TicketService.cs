@@ -1,10 +1,8 @@
 using Application.Abstractions.Persistence;
 using Application.Common;
 
- 
+
 using Application.Features.Tickets.Requests;
-using Application.Features.Tickets.Responses;
-using Application.Interfaces;
 using Core.Enums;
 using Core.Models;
 
@@ -13,6 +11,8 @@ namespace Application.Features.Tickets;
 public sealed class TicketService : ITicketService
 {
     private readonly ITicketRepository _ticketRepository;
+ 
+    
     private readonly IEmployeeRepository _employeeRepository;
     private readonly TicketStateMachine _stateMachine;
 
@@ -25,6 +25,7 @@ public sealed class TicketService : ITicketService
         _ticketRepository = ticketRepository;
         _employeeRepository = employeeRepository;
         _stateMachine = stateMachine;
+      
     }
 
 
@@ -45,10 +46,14 @@ public sealed class TicketService : ITicketService
         }
 
 
-        Employee? executor = null;
+        var executor =
+                await _employeeRepository.GetByIdAsync(
+                    request.ExecutorId,
+                    cancellationToken);
 
 
-      
+    
+
 
 
         var ticket = Ticket.Create(
@@ -157,46 +162,7 @@ public sealed class TicketService : ITicketService
 
 
 
-    public async Task<Result<TicketResponse>> GetByIdAsync(
-        Guid ticketId,
-        CancellationToken cancellationToken)
-    {
-        var ticket =
-            await _ticketRepository.GetByIdAsync(
-                ticketId,
-                cancellationToken);
+  
 
-
-        if (ticket is null)
-        {
-            return Result<TicketResponse>.Failure(
-                "Ticket not found");
-        }
-
-
-        return Result<TicketResponse>.Success(
-            ticket.ToResponse());
-    }
-
-
-
-    public async Task<Result<IReadOnlyCollection<TicketResponse>>> GetAsync(
-        TicketFilterRequest filter,
-        CancellationToken cancellationToken)
-    {
-        var tickets =
-            await _ticketRepository.GetAsync(
-                filter,
-                cancellationToken);
-
-
-        var response =
-            tickets
-                .Select(ticket => ticket.ToResponse())
-                .ToArray();
-
-
-        return Result<IReadOnlyCollection<TicketResponse>>
-            .Success(response);
-    }
+  
 }

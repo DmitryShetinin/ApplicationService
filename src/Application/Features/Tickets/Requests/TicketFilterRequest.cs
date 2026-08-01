@@ -6,4 +6,6 @@ public sealed record TicketFilterRequest(
 TicketStatus? Status,
 Guid? ExecutorId,
 Guid? DepartmentId,
-bool? OnlyOverdue);
+bool? OnlyOverdue,
+int? Page = 1, 
+int? PageSize = 12);

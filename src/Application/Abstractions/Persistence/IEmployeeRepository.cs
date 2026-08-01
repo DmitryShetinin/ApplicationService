@@ -3,9 +3,9 @@ using Core.Models;
 namespace Application.Abstractions.Persistence;
 
 public interface IEmployeeRepository
-{
+{   
     Task<Employee?> GetByIdAsync(
-        Guid id,
+        Guid? id,
         CancellationToken cancellationToken);
 
 
@@ -18,7 +18,12 @@ public interface IEmployeeRepository
         CancellationToken cancellationToken);
 
 
-    Task UpdateAsync(
+    Task SaveChangesAsync(
         Employee employee,
+        CancellationToken cancellationToken);
+
+
+    Task<bool> ExistsAsync(
+        Guid id,
         CancellationToken cancellationToken);
 }

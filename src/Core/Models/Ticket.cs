@@ -1,4 +1,5 @@
 using Core.Enums;
+using Core.ValueObjects;
 
 namespace Core.Models;
 
@@ -8,7 +9,7 @@ public sealed class Ticket
   {
   }
 
-  public Ticket(
+  private Ticket(
       Guid id,
       int number,
       Employee author,
@@ -29,15 +30,16 @@ public sealed class Ticket
 
   public Guid Id { get; private set; }
 
+  public IReadOnlyCollection<TicketTransition> AllowedTransitions; 
   public int Number { get; private set; }
 
   public DateTime CreatedAt { get; private set; }
 
   public Guid AuthorId { get; private set; }
-public Employee Author { get; private set; } = null!;
+  public Employee Author { get; private set; } = null!;
 
-public Guid? ExecutorId { get; private set; }
-public Employee? Executor { get; private set; }
+  public Guid? ExecutorId { get; private set; }
+  public Employee? Executor { get; private set; }
 
   public string Description { get; private set; }
 
@@ -55,36 +57,36 @@ public Employee? Executor { get; private set; }
     Status = status;
   }
 
-public static Ticket Create(
-        int number,
-        Employee author,
-        Employee executor,
-        string description,
-        DateTime deadline)
-    {
-        ArgumentNullException.ThrowIfNull(author);
-        ArgumentNullException.ThrowIfNull(executor);
+  public static Ticket Create(
+          int number,
+          Employee author,
+          Employee executor,
+          string description,
+          DateTime deadline)
+  {
+    ArgumentNullException.ThrowIfNull(author);
+    ArgumentNullException.ThrowIfNull(executor);
 
-        if (string.IsNullOrWhiteSpace(description))
-            throw new ArgumentException(
-                "Description cannot be empty",
-                nameof(description));
+    if (string.IsNullOrWhiteSpace(description))
+      throw new ArgumentException(
+          "Description cannot be empty",
+          nameof(description));
 
-        if (deadline <= DateTime.UtcNow)
-            throw new ArgumentException(
-                "Deadline must be in the future",
-                nameof(deadline));
+    if (deadline <= DateTime.UtcNow)
+      throw new ArgumentException(
+          "Deadline must be in the future",
+          nameof(deadline));
 
 
-        return new Ticket(
-            Guid.NewGuid(),
-            number,
-            author,
-            executor,
-            description,
-            deadline);
-    }
- 
+    return new Ticket(
+        Guid.NewGuid(),
+        number,
+        author,
+        executor,
+        description,
+        deadline);
+  }
+
 
   public TicketEvent Complete(
       TicketStateMachine stateMachine)
