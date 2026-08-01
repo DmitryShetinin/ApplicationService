@@ -5,6 +5,8 @@ using Application.Common;
 using Application.Features.Tickets.Requests;
 using Core.Enums;
 using Core.Models;
+using Microsoft.AspNetCore.SignalR;
+using WebApi.Hubs;
 
 namespace Application.Features.Tickets;
 
@@ -16,15 +18,19 @@ public sealed class TicketService : ITicketService
     private readonly IEmployeeRepository _employeeRepository;
     private readonly TicketStateMachine _stateMachine;
 
+    private readonly IHubContext<TicketHub> _hub;
 
+    
     public TicketService(
         ITicketRepository ticketRepository,
         IEmployeeRepository employeeRepository,
-        TicketStateMachine stateMachine)
+        TicketStateMachine stateMachine,
+        IHubContext<TicketHub> hub)
     {
         _ticketRepository = ticketRepository;
         _employeeRepository = employeeRepository;
         _stateMachine = stateMachine;
+        _hub = hub;
       
     }
 
@@ -112,7 +118,11 @@ public sealed class TicketService : ITicketService
 
     await _ticketRepository.SaveChangesAsync(
         cancellationToken);
-
+        
+    await _hub.Clients.All.SendAsync(
+        "TicketUpdated",
+        ticket.Id
+    );
 
     return Result<bool>.Success(true);
 }

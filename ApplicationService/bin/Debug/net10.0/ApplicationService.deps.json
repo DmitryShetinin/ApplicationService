@@ -15,7 +15,8 @@
           "Microsoft.EntityFrameworkCore.Design": "10.0.10",
           "Swashbuckle.AspNetCore.Swagger": "10.2.3",
           "Swashbuckle.AspNetCore.SwaggerGen": "10.2.3",
-          "Swashbuckle.AspNetCore.SwaggerUI": "10.2.3"
+          "Swashbuckle.AspNetCore.SwaggerUI": "10.2.3",
+          "WebApi": "1.0.0"
         },
         "runtime": {
           "ApplicationService.dll": {}
@@ -586,7 +587,8 @@
           "Core": "1.0.0",
           "Mapster": "10.0.11",
           "Mapster.DependencyInjection": "10.0.11",
-          "Mapster.EFCore": "10.0.11"
+          "Mapster.EFCore": "10.0.11",
+          "WebApi": "1.0.0"
         },
         "runtime": {
           "Application.dll": {
@@ -613,6 +615,14 @@
         },
         "runtime": {
           "Infrastructure.dll": {
+            "assemblyVersion": "1.0.0.0",
+            "fileVersion": "1.0.0.0"
+          }
+        }
+      },
+      "WebApi/1.0.0": {
+        "runtime": {
+          "WebApi.dll": {
             "assemblyVersion": "1.0.0.0",
             "fileVersion": "1.0.0.0"
           }
@@ -875,6 +885,11 @@
       "sha512": ""
     },
     "Infrastructure/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "WebApi/1.0.0": {
       "type": "project",
       "serviceable": false,
       "sha512": ""
