@@ -34,9 +34,11 @@ export default function Column({
 
   const [dragOver, setDragOver] = useState(false);
 
+ 
+   
   const bodyRef = useRef(null);
   const loaderRef = useRef(null);
-
+ 
   useEffect(() => {
 
     if (!loaderRef.current || !bodyRef.current)
@@ -71,7 +73,7 @@ export default function Column({
     draggedTicket.allowedTransitions?.some(
       x => x.status === status
     );
-
+    
   const handleDragOver = e => {
     e.preventDefault();
     setDragOver(true);
@@ -122,6 +124,8 @@ export default function Column({
               {tickets.map(ticket => (
                 <TicketCard
                   key={ticket.id}
+                  author={ticket.author}
+                  executor={ticket.executor}
                   ticket={ticket}
                   draggable
                   onDragStart={() => onDragStart(ticket)}

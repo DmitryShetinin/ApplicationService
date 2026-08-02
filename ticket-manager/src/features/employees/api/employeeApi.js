@@ -10,13 +10,13 @@ function getInitials(fullName) {
 
 export async function getEmployees() {
   const response = await fetch(API_URL);
-  console.log(1)
+ 
   if (!response.ok) {
     throw new Error("Не удалось получить сотрудников");
   }
 
   const employees = await response.json();
-  console.log(employees)
+ 
   return employees.map(employee => ({
     id: employee.id,
     name: employee.fullName,

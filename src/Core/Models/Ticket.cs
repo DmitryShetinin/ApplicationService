@@ -29,7 +29,7 @@ public sealed class Ticket
   }
 
   public Guid Id { get; private set; }
-
+ 
   public IReadOnlyCollection<TicketTransition> AllowedTransitions; 
   public int Number { get; private set; }
 

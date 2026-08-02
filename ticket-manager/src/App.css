@@ -191,6 +191,27 @@ body {
   cursor: pointer;
   flex-shrink: 0;
 }
+
+.ticket-card {
+  position: relative; /* важно для абсолютного позиционирования бейджа */
+}
+
+.ticket-position {
+  position: absolute;
+  top: 8px;
+  right: 12px;
+  background: transparent;
+  border: 1px solid #fbbf24;
+  border-radius: 12px;
+  padding: 2px 10px;
+  font-size: 11px;
+  font-weight: 700;
+  color: #fbbf24;
+  letter-spacing: 0.3px;
+  white-space: nowrap;
+  text-shadow: 0 0 8px rgba(251, 191, 36, 0.5);
+}
+
 /* В сетке ширина задаётся через класс-обёртку, но мы управляем через родительский контейнер.
    Поэтому в сетке карточка получает width от родителя, а в колонках канбана она остаётся без width.
    Чтобы не ломать канбан, укажем width только в контексте .content */
@@ -217,6 +238,10 @@ body {
 }
 .ticket-meta { display:flex; flex-wrap:wrap; gap:8px 14px; font-size:11px; color:var(--text3); margin-top:auto; }
 .ticket-meta-item { display:flex; align-items:center; gap:5px; }
+.ticket-meta-people {
+  flex-direction: column;
+  gap: 6px; /* можешь регулировать расстояние */
+}
 .ticket-avatar {
   width:22px; height:22px; border-radius:50%; background:var(--accent);
   color:#fff; font-size:10px; font-weight:700; display:inline-flex;
@@ -394,32 +419,156 @@ body {
   background: var(--surface);
   border: 1px solid var(--border);
   border-radius: var(--radius);
-  padding: 28px;
-  box-shadow: var(--shadow);
+  padding: 32px;
+  box-shadow: var(--shadow-lg);
   max-width: 900px;
   width: 100%;
   margin: 0 auto;
+  animation: fadeSlideIn 0.4s ease;
 }
+
+@keyframes fadeSlideIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
 .report-card h2 {
-  font-size: 22px; font-weight: 700; margin-bottom: 20px; color: #fff;
-}
-.report-section {
+  font-size: 24px;
+  font-weight: 700;
   margin-bottom: 24px;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  letter-spacing: -0.3px;
 }
+.report-card h2::before {
+  content: '';
+  width: 4px;
+  height: 28px;
+  background: var(--accent);
+  border-radius: 2px;
+}
+
+/* Секция отчёта */
+.report-section {
+  margin-bottom: 28px;
+  background: rgba(99, 102, 241, 0.03);
+  border: 1px solid rgba(99, 102, 241, 0.08);
+  border-radius: var(--radius-sm);
+  padding: 18px 20px;
+  transition: var(--transition);
+}
+.report-section:hover {
+  background: rgba(99, 102, 241, 0.06);
+  border-color: rgba(99, 102, 241, 0.2);
+}
+
 .report-section h3 {
-  font-size: 16px; color: var(--text2); text-transform: uppercase;
-  letter-spacing: 0.5px; margin-bottom: 10px; font-weight: 600;
+  font-size: 14px;
+  color: var(--text2);
+  text-transform: uppercase;
+  letter-spacing: 0.7px;
+  margin-bottom: 14px;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 8px;
 }
+.report-section h3::before {
+  content: '';
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--accent);
+}
+
+/* Строки отчёта */
 .report-row {
-  display: flex; justify-content: space-between; align-items: center;
-  padding: 10px 0; border-bottom: 1px solid var(--border); font-size: 15px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 14px;
+  border-radius: var(--radius-xs);
+  margin-bottom: 6px;
+  background: rgba(255, 255, 255, 0.02);
+  transition: var(--transition);
+  font-size: 15px;
+  color: var(--text);
 }
-.report-row:last-child { border-bottom: none; }
+.report-row:last-child {
+  margin-bottom: 0;
+}
+.report-row:hover {
+  background: rgba(255, 255, 255, 0.05);
+  transform: translateX(2px);
+}
+
+/* Бейджи */
 .badge {
-  display: inline-block; padding: 4px 10px; border-radius: 12px;
-  font-weight: 600; font-size: 13px;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 5px 12px;
+  border-radius: 20px;
+  font-weight: 700;
+  font-size: 13px;
+  letter-spacing: 0.2px;
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  transition: var(--transition);
 }
- 
+.badge-blue {
+  background: rgba(59, 130, 246, 0.15);
+  border-color: rgba(59, 130, 246, 0.3);
+  color: #60a5fa;
+}
+.badge-orange {
+  background: rgba(245, 158, 11, 0.15);
+  border-color: rgba(245, 158, 11, 0.3);
+  color: #fbbf24;
+}
+.badge-green {
+  background: rgba(16, 185, 129, 0.15);
+  border-color: rgba(16, 185, 129, 0.3);
+  color: #34d399;
+}
+.badge-red {
+  background: rgba(239, 68, 68, 0.15);
+  border-color: rgba(239, 68, 68, 0.3);
+  color: #f87171;
+}
+
+/* Кнопка скачивания */
+.btn-download {
+  background: var(--accent);
+  color: #fff;
+  margin-top: 24px;
+  padding: 12px 28px;
+  border-radius: var(--radius-xs);
+  border: none;
+  font-weight: 600;
+  cursor: pointer;
+  transition: var(--transition);
+  font-family: inherit;
+  font-size: 15px;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  box-shadow: 0 4px 14px rgba(99, 102, 241, 0.3);
+}
+.btn-download:hover {
+  background: var(--accent-hover);
+  box-shadow: 0 6px 20px rgba(99, 102, 241, 0.5);
+  transform: translateY(-1px);
+}
 
  
 /* Убираем любые обводки у колонок (фокус, активность, drag-over) */

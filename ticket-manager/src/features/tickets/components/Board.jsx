@@ -30,7 +30,7 @@ export default function Board({
     onMove(draggedTicket.id, status);
     setDraggedTicket(null);
   };
-
+ 
   if (viewMode === "kanban") {
     return (
       <div className="board-container">

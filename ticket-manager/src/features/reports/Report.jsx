@@ -1,92 +1,163 @@
-import { useMemo } from 'react';
+import {useEffect,useRef,useState} from "react";
 
-export default function Report({ tickets, employees }) {
-  const reportData = useMemo(() => {
-    const now = new Date();
-    const byStatus = { 1: 0, 2: 0, 3: 0 };
-    let overdueCount = 0;
-    const completedByExecutor = {};
+export default function Report({
+    report,
+    loading
+}){
 
-    employees.forEach(emp => {
-      completedByExecutor[emp.id] = 0;
-    });
+    const loaderRef=useRef(null);
 
-    tickets.forEach(ticket => {
-      byStatus[ticket.status] = (byStatus[ticket.status] || 0) + 1;
-      if (ticket.status !== 3 && new Date(ticket.deadline) < now) {
-        overdueCount++;
-      }
-      if (ticket.status === 3) {
-        completedByExecutor[ticket.executorId] = (completedByExecutor[ticket.executorId] || 0) + 1;
-      }
-    });
+    const [visibleCount,setVisibleCount]=useState(2);
+console.log(report.executors.length);
+console.log(report.executors);
+    useEffect(()=>{
 
-    return { byStatus, overdueCount, completedByExecutor };
-  }, [tickets, employees]);
+        if(!loaderRef.current)
+            return;
 
-  const downloadReport = () => {
-    let text = 'Отчёт по заявкам\n\n';
-    text += `Новые: ${reportData.byStatus[1]}\n`;
-    text += `В работе: ${reportData.byStatus[2]}\n`;
-    text += `Завершено: ${reportData.byStatus[3]}\n`;
-    text += `Просроченные: ${reportData.overdueCount}\n\n`;
-    text += 'Выполненные заявки по исполнителям:\n';
-    employees.forEach(emp => {
-      text += `${emp.name} (${emp.department}): ${reportData.completedByExecutor[emp.id] || 0}\n`;
-    });
+        const observer=new IntersectionObserver(entries=>{
 
-    const blob = new Blob([text], { type: 'text/plain;charset=utf-8' });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = `отчёт_${new Date().toISOString().slice(0, 10)}.txt`;
-    a.click();
-    URL.revokeObjectURL(url);
-  };
+            if(entries[0].isIntersecting){
 
-  return (
-    <div className="content">
-      <div className="report-card">
-        <h2>📈 Отчёт по заявкам</h2>
+                setVisibleCount(x=>
+                    Math.min(
+                        x+20,
+                        report?.executors.length??0
+                    )
+                );
 
-        <div className="report-section">
-          <h3>Количество заявок по статусам</h3>
-          <div className="report-row">
-            <span>Новые</span>
-            <span className="badge badge-blue">{reportData.byStatus[1]}</span>
-          </div>
-          <div className="report-row">
-            <span>В работе</span>
-            <span className="badge badge-orange">{reportData.byStatus[2]}</span>
-          </div>
-          <div className="report-row">
-            <span>Завершено</span>
-            <span className="badge badge-green">{reportData.byStatus[3]}</span>
-          </div>
-        </div>
+            }
 
-        <div className="report-section">
-          <h3>Просроченные заявки</h3>
-          <div className="report-row">
-            <span>Просрочено (не завершены, дедлайн прошёл)</span>
-            <span className="badge badge-red">{reportData.overdueCount}</span>
-          </div>
-        </div>
+        });
 
-        <div className="report-section">
-          <h3>Выполненные заявки по исполнителям</h3>
-          {employees.map(emp => (
-            <div className="report-row" key={emp.id}>
-              <span>{emp.name} ({emp.department})</span>
-              <span className="badge badge-green">{reportData.completedByExecutor[emp.id] || 0}</span>
+        observer.observe(loaderRef.current);
+
+        return()=>observer.disconnect();
+
+    },[report?.executors.length]);
+
+    if(loading)
+        return(
+            <div className="content">
+                Загрузка...
             </div>
-          ))}
+        );
+
+    if(!report)
+        return null;
+
+    return(
+
+        <div className="content">
+
+            <div className="report-card">
+
+                <h2>📈 Отчёт по заявкам</h2>
+
+                <div className="report-section">
+
+                    <h3>Общая статистика</h3>
+
+                    <div className="report-row">
+                        <span>Всего заявок</span>
+                        <span className="badge">
+                            {report.totalTickets}
+                        </span>
+                    </div>
+
+                    <div className="report-row">
+                        <span>Новые</span>
+                        <span className="badge badge-blue">
+                            {report.newTickets}
+                        </span>
+                    </div>
+
+                    <div className="report-row">
+                        <span>В работе</span>
+                        <span className="badge badge-orange">
+                            {report.processingTickets}
+                        </span>
+                    </div>
+
+                    <div className="report-row">
+                        <span>Завершено</span>
+                        <span className="badge badge-green">
+                            {report.completedTickets}
+                        </span>
+                    </div>
+
+                    <div className="report-row">
+                        <span>Просроченные</span>
+                        <span className="badge badge-red">
+                            {report.overdueTickets}
+                        </span>
+                    </div>
+
+                </div>
+
+                <div className="report-section">
+
+                    <h3>Статистика по отделам</h3>
+
+                    {report.departments.map(dep=>(
+
+                        <div
+                            key={dep.department}
+                            className="report-row"
+                        >
+
+                            <span>{dep.department}</span>
+
+                            <span className="badge">
+                                {dep.tickets}
+                            </span>
+
+                        </div>
+
+                    ))}
+
+                </div>
+
+                <div className="report-section">
+
+                    <h3>Топ исполнителей</h3>
+
+                    {report.executors
+                        .slice(0,visibleCount)
+                        .map(emp=>(
+
+                            <div
+                                key={emp.id}
+                                className="report-row"
+                            >
+
+                                <span>{emp.fullName}</span>
+
+                                <span className="badge badge-green">
+                                    {emp.tickets}
+                                </span>
+
+                            </div>
+
+                        ))}
+
+                    <div
+                        ref={loaderRef}
+                        style={{height:20}}
+                    />
+
+                </div>
+
+                <button
+                    className="btn-download"
+                >
+                    📥 Скачать отчёт (.txt)
+                </button>
+
+            </div>
+
         </div>
 
-        <button className="btn-download" onClick={downloadReport}>
-          📥 Скачать отчёт (.txt)
-        </button>
-      </div>
-    </div>
-  );
+    );
+
 }

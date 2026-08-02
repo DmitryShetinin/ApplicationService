@@ -19,5 +19,6 @@ public sealed record TicketResponse(
     string Description,
     DateTime CreatedAt,
     DateTime Deadline,
+    uint Version,
     TicketStatus Status, 
     IReadOnlyCollection<TicketTransition> AllowedTransitions);

@@ -104,35 +104,32 @@ public sealed class TicketQueries : ITicketQueries
 
 
         var newTickets = await _context.Tickets
-            .AsNoTracking()
-            .Include(x => x.Author)
-            .Include(x => x.Executor)
-            .Where(x => x.Status == TicketStatus.New)
-            .OrderByDescending(x => x.CreatedAt)
-            .Take(pageSize)
-            .ToListAsync(cancellationToken);
+                        .AsNoTracking()
+                        .IncludeEmployees()
+                        .Where(x => x.Status == TicketStatus.New)
+                        .OrderByDescending(x => x.CreatedAt)
+                        .Take(pageSize)
+                        .ToListAsync(cancellationToken);
 
 
         var processingTickets = await _context.Tickets
-            .AsNoTracking()
-            .Include(x => x.Author)
-            .Include(x => x.Executor)
-            .Where(x => x.Status == TicketStatus.Processing)
-            .OrderByDescending(x => x.CreatedAt)
-            .Take(pageSize)
-            .ToListAsync(cancellationToken);
+                                .AsNoTracking()
+                                .IncludeEmployees()
+                                .Where(x => x.Status == TicketStatus.Processing)
+                                .OrderByDescending(x => x.CreatedAt)
+                                .Take(pageSize)
+                                .ToListAsync(cancellationToken);
 
-
+       
         var completedTickets = await _context.Tickets
-            .AsNoTracking()
-            .Include(x => x.Author)
-            .Include(x => x.Executor)
-            .Where(x => x.Status == TicketStatus.Completed)
-            .OrderByDescending(x => x.CreatedAt)
-            .Take(pageSize)
-            .ToListAsync(cancellationToken);
+                                .AsNoTracking()
+                                .IncludeEmployees()
+                                .Where(x => x.Status == TicketStatus.Completed)
+                                .OrderByDescending(x => x.CreatedAt)
+                                .Take(pageSize)
+                                .ToListAsync(cancellationToken);
 
-
+  
 
         var newCount = await _context.Tickets
             .CountAsync(

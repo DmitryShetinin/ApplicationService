@@ -9,6 +9,7 @@ using Infrastructure.Persistence.Repositories;
 using Application.Queries;
 using Infrastructure.Queries;
 using Core.Models;
+using Application.Features.Reports.Interfaces;
 
 
 public static class PersistenceExtensions
@@ -47,6 +48,9 @@ public static class PersistenceExtensions
     services.AddScoped<IPositionRepository, PositionRepository>();
     services.AddScoped<ITicketQueries, TicketQueries>();
     services.AddTransient<TicketStateMachine>();
+    services.AddScoped<IReportQueries, ReportQueries>();
+
+
     return services;
   }
 }
