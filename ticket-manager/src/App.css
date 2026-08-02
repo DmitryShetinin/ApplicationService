@@ -127,7 +127,7 @@ body {
 .column-body::-webkit-scrollbar { width:4px; }
 .column-body::-webkit-scrollbar-thumb { background:var(--border); border-radius:4px; }
 .drop-zone {
-  flex:1; height:100%; border-radius:var(--radius-sm);
+  flex:1;   border-radius:var(--radius-sm);
  
   display:flex; 
   
@@ -148,6 +148,7 @@ body {
   overflow-y: auto;
   display: flex;
   flex-wrap: wrap;
+  
   gap: 16px;
   align-content: flex-start;
   /* новая обводка и фон */
@@ -470,7 +471,7 @@ body {
   margin-left: auto;
   margin-right: auto;
  position: relative;
-  top: -12px;
+  top: -22px;
 }
 
 .pagination button {

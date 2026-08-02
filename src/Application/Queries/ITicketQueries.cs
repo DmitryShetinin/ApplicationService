@@ -17,7 +17,8 @@ public interface ITicketQueries
         TicketFilterRequest filter,
         CancellationToken cancellationToken);
 
-
-    
+  
+   
+    Task<Result<KanbanResponse>> GetKanbanAsync(CancellationToken cancellationToken); 
         
 }

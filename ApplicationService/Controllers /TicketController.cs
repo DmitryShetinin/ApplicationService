@@ -18,7 +18,7 @@ public sealed record ChangeTicketStatusRequest(
 public sealed class TicketsController : ControllerBase
 {
     private readonly ITicketService _ticketService;
-    private readonly ITicketQueries _ticketQueries; 
+    private readonly ITicketQueries _ticketQueries;
 
     public TicketsController(
         ITicketService ticketService, ITicketQueries ticketQueries)
@@ -104,6 +104,20 @@ public sealed class TicketsController : ControllerBase
 
         return Ok(result.Value);
     }
+
+
+    [HttpGet("kanban")]
+    public async Task<IActionResult> Kanban(
+      CancellationToken cancellationToken)
+    {
+        var result = await _ticketQueries.GetKanbanAsync(cancellationToken);
+
+        if (result.IsFailure)
+            return BadRequest(result.Error);
+
+        return Ok(result.Value);
+    }
+
 
 
 
