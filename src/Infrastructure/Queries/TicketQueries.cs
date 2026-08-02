@@ -3,6 +3,7 @@ using Application.Common;
 using Application.Features.Tickets.Requests;
 using Application.Features.Tickets.Responses;
 using Application.Queries;
+using Core.Enums;
 using Core.Models;
 using Infrastructure.Persistence;
 
@@ -15,12 +16,12 @@ namespace Infrastructure.Queries;
 public sealed class TicketQueries : ITicketQueries
 {
     private readonly AppDbContext _context;
-  private readonly TicketStateMachine _stateMachine;
+    private readonly TicketStateMachine _stateMachine;
     public TicketQueries(
         AppDbContext context, TicketStateMachine stateMachine)
     {
         _context = context;
-        _stateMachine = stateMachine; 
+        _stateMachine = stateMachine;
     }
 
     public async Task<Result<TicketResponse>> GetByIdAsync(
@@ -45,55 +46,154 @@ public sealed class TicketQueries : ITicketQueries
     public async Task<Result<PagedResult<TicketResponse>>> GetAsync(
     TicketFilterRequest filter,
     CancellationToken cancellationToken)
-{
-    var query = new TicketQueryBuilder(
-        _context.Tickets,
-        filter)
-        .Build();
+    {
+        var query = new TicketQueryBuilder(
+            _context.Tickets,
+            filter)
+            .Build();
 
 
-    var totalCount = await query
-        .CountAsync(cancellationToken);
-
-
-
-    var page = filter.Page ?? 1;
-    var pageSize = filter.PageSize ?? 10;
+        var totalCount = await query
+            .CountAsync(cancellationToken);
 
 
 
-    var tickets = await query
-        .OrderByDescending(x => x.CreatedAt)
-        .Skip(
-            (page - 1) * pageSize
-        )
-        .Take(pageSize)
-        .ProjectToType<TicketResponse>()
-        .ToListAsync(cancellationToken);
+        var page = filter.Page ?? 1;
+        var pageSize = filter.PageSize ?? 10;
 
 
 
-    var result = tickets
-        .Select(ticket => ticket with
-        {
-            AllowedTransitions =
-                _stateMachine.GetAllowedTransitions(
-                    ticket.Status)
-        })
-        .ToArray();
-
-
-
-    return Result<PagedResult<TicketResponse>>
-        .Success(
-            new PagedResult<TicketResponse>(
-                result,
-                page,
-                pageSize,
-                totalCount
+        var tickets = await query
+            .OrderByDescending(x => x.CreatedAt)
+            .Skip(
+                (page - 1) * pageSize
             )
-        );
-}
+            .Take(pageSize)
+            .ProjectToType<TicketResponse>()
+            .ToListAsync(cancellationToken);
 
-    
+
+
+        var result = tickets
+            .Select(ticket => ticket with
+            {
+                AllowedTransitions =
+                    _stateMachine.GetAllowedTransitions(
+                        ticket.Status)
+            })
+            .ToArray();
+
+
+
+        return Result<PagedResult<TicketResponse>>
+            .Success(
+                new PagedResult<TicketResponse>(
+                    result,
+                    page,
+                    pageSize,
+                    totalCount
+                )
+            );
+    }
+
+
+    public async Task<Result<KanbanResponse>> GetKanbanAsync(
+      CancellationToken cancellationToken)
+    {
+        const int pageSize = 20;
+
+
+        var newTickets = await _context.Tickets
+            .AsNoTracking()
+            .Include(x => x.Author)
+            .Include(x => x.Executor)
+            .Where(x => x.Status == TicketStatus.New)
+            .OrderByDescending(x => x.CreatedAt)
+            .Take(pageSize)
+            .ToListAsync(cancellationToken);
+
+
+        var processingTickets = await _context.Tickets
+            .AsNoTracking()
+            .Include(x => x.Author)
+            .Include(x => x.Executor)
+            .Where(x => x.Status == TicketStatus.Processing)
+            .OrderByDescending(x => x.CreatedAt)
+            .Take(pageSize)
+            .ToListAsync(cancellationToken);
+
+
+        var completedTickets = await _context.Tickets
+            .AsNoTracking()
+            .Include(x => x.Author)
+            .Include(x => x.Executor)
+            .Where(x => x.Status == TicketStatus.Completed)
+            .OrderByDescending(x => x.CreatedAt)
+            .Take(pageSize)
+            .ToListAsync(cancellationToken);
+
+
+
+        var newCount = await _context.Tickets
+            .CountAsync(
+                x => x.Status == TicketStatus.New,
+                cancellationToken);
+
+
+        var processingCount = await _context.Tickets
+            .CountAsync(
+                x => x.Status == TicketStatus.Processing,
+                cancellationToken);
+
+
+        var completedCount = await _context.Tickets
+            .CountAsync(
+                x => x.Status == TicketStatus.Completed,
+                cancellationToken);
+
+
+
+        return Result<KanbanResponse>.Success(
+            new KanbanResponse
+            {
+                New = new KanbanColumnResponse
+                {
+                    Items = newTickets.ToResponse(),
+
+                    Page = 1,
+
+                    TotalCount = newCount,
+
+                    TotalPages = (int)Math.Ceiling(
+                        newCount / (double)pageSize)
+                },
+
+
+                InProgress = new KanbanColumnResponse
+                {
+                    Items = processingTickets.ToResponse(),
+
+                    Page = 1,
+
+                    TotalCount = processingCount,
+
+                    TotalPages = (int)Math.Ceiling(
+                        processingCount / (double)pageSize)
+                },
+
+
+                Completed = new KanbanColumnResponse
+                {
+                    Items = completedTickets.ToResponse(),
+
+                    Page = 1,
+
+                    TotalCount = completedCount,
+
+                    TotalPages = (int)Math.Ceiling(
+                        completedCount / (double)pageSize)
+                }
+            });
+    }
+
 }
