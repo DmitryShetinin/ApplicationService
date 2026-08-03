@@ -2,7 +2,9 @@ namespace Application.Features.Employees.Responses;
 
 public sealed record EmployeeResponse(
     Guid? Id,
-    string? FullName,
+    string firstName,
+    string lastName,
+    string? middleName,
     Guid? DepartmentId,
     string? Department,
     Guid? PositionId,

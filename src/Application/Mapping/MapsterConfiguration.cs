@@ -1,7 +1,7 @@
 using System.Reflection;
 using Mapster;
 
-public static class MapsterConfiguration
+public class MapsterConfiguration
 {
     public static void RegisterMappings()
     {

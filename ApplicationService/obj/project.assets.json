@@ -786,8 +786,7 @@
           "Core": "1.0.0",
           "Mapster": "10.0.11",
           "Mapster.DependencyInjection": "10.0.11",
-          "Mapster.EFCore": "10.0.11",
-          "WebApi": "1.0.0"
+          "Mapster.EFCore": "10.0.11"
         },
         "compile": {
           "bin/placeholder/Application.dll": {}
@@ -826,6 +825,9 @@
       "WebApi/1.0.0": {
         "type": "project",
         "framework": ".NETCoreApp,Version=v10.0",
+        "dependencies": {
+          "Application": "1.0.0"
+        },
         "compile": {
           "bin/placeholder/WebApi.dll": {}
         },

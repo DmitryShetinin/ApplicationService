@@ -1,8 +1,10 @@
-using Core.ValueObjects;
+ 
 
 namespace Application.Features.Employees.Requests;
 
 public sealed record CreateEmployeeRequest(
-    FullName FullName,
+    string FirstName,
+    string LastName,
+    string? MiddleName,
     Guid DepartmentId,
     Guid PositionId);

@@ -13,7 +13,7 @@ public sealed class TicketRepository : ITicketRepository
 
 
     public TicketRepository(
-        AppDbContext context, TicketStateMachine stateMachine)
+        AppDbContext context)
     {
         _context = context;
 

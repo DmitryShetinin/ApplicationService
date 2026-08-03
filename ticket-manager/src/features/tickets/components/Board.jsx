@@ -23,7 +23,7 @@ export default function Board({
       x => x.status === status
     );
     if (!allowed) {
-      console.log(`Запрещенный переход ${draggedTicket.status} -> ${status}`);
+       
       setDraggedTicket(null);
       return;
     }

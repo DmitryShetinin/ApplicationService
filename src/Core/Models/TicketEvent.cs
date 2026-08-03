@@ -1,38 +1,51 @@
 using Core.Enums;
 
 namespace Core.Models;
-
-public sealed class TicketEvent(
-    Guid TicketId,
-    Guid Id, 
-    TicketStatus PreviousStatus,
-    TicketStatus CurrentStatus,
-    string Description,
-    DateTime OccurredAt)
+public sealed class TicketEvent
 {
+    private TicketEvent()
+    {
+    }
 
 
-    public Guid TicketId { get; private set; }
+    private TicketEvent(
+        Guid ticketId,
+        TicketStatus previousStatus,
+        TicketStatus currentStatus,
+        string description)
+    {
+        Id = Guid.NewGuid();
+        TicketId = ticketId;
+        PreviousStatus = previousStatus;
+        CurrentStatus = currentStatus;
+        Description = description;
+        OccurredAt = DateTime.UtcNow;
+    }
 
-    public Guid Id { get; private set; }
-    public TicketStatus PreviousStatus { get; private set; }
-    public TicketStatus CurrentStatus { get; private set; }
-    public string Description { get; private set; }
-    public DateTime OccurredAt { get; private set; }
-    
+
+    public Guid Id {get;private set;}
+
+    public Guid TicketId {get;private set;}
+
+    public TicketStatus PreviousStatus {get;private set;}
+
+    public TicketStatus CurrentStatus {get;private set;}
+
+    public string Description {get;private set;}
+
+    public DateTime OccurredAt {get;private set;}
+
 
     public static TicketEvent Create(
-        Guid TicketId,
+        Guid ticketId,
         TicketStatus previousStatus,
         TicketStatus currentStatus,
         string description)
     {
         return new TicketEvent(
-            TicketId,
-            Guid.NewGuid(),  
+            ticketId,
             previousStatus,
             currentStatus,
-            description,
-            DateTime.UtcNow);
+            description);
     }
 }

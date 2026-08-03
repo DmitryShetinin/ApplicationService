@@ -1,3 +1,4 @@
+using Application.Common;
 using Application.Features.Employees.Requests;
 using Application.Features.Employees.Responses;
 
@@ -5,7 +6,7 @@ namespace Application.Features.Employees;
 
 public interface IEmployeeService
 {
-    Task<Guid> CreateAsync(
+   Task<Result<Guid>> CreateAsync(
         CreateEmployeeRequest request,
         CancellationToken cancellationToken);
 
@@ -15,6 +16,6 @@ public interface IEmployeeService
         CancellationToken cancellationToken);
 
 
-    Task<IReadOnlyCollection<EmployeeResponse>> GetAsync(
+    Task<IReadOnlyCollection<EmployeeResponse>> GetEmployeesAsync(
         CancellationToken cancellationToken);
 }

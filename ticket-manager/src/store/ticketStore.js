@@ -145,49 +145,45 @@ const useTicketStore = create((set) => ({
 
         
     // заменяем временный тикет настоящим
-    replaceTicket: (
-        tempId,
-        ticket
-    ) =>
-        set(state => {
+     replaceTicket: (
+    tempId,
+    ticket
+) =>
+set(state => {
 
-            const columns = {};
+    const columns = {};
 
-            Object.keys(state.columns)
-                .forEach(status => {
+    Object.keys(state.columns)
+        .forEach(status => {
 
-                    columns[status] = {
+            columns[status] = {
+                ...state.columns[status],
 
-                        ...state.columns[status],
-
-                        items:
-                            state.columns[status]
-                                .items
-                                .map(x =>
-                                    x.id === tempId
-                                        ? ticket
-                                        : x
-                                )
-
-                    };
-
-                });
-
-
-            return {
-
-                columns,
-
-                gridTickets:
-                    state.gridTickets.map(x =>
-                        x.id === tempId
-                            ? ticket
-                            : x
-                    )
-
+                items:
+                    state.columns[status]
+                    .items
+                    .filter(x => x.id !== tempId)
             };
 
-        }),
+        });
+
+
+    columns[ticket.status].items.unshift(ticket);
+
+
+    return {
+        columns,
+
+        gridTickets:
+            state.gridTickets
+            .map(x =>
+                x.id === tempId
+                    ? ticket
+                    : x
+            )
+    };
+
+}),
 
 
     updateTicket: (ticket) =>
@@ -233,6 +229,7 @@ const useTicketStore = create((set) => ({
 
         }),
 
+        
 
     removeTicket: (id) =>
         set(state => {

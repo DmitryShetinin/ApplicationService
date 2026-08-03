@@ -62,7 +62,7 @@
             createTicket
         } = useTicketActions(
     
-            console.log
+    
         );
         
         useTicketHub();

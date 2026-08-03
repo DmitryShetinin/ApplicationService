@@ -1,5 +1,5 @@
-using System.Reflection;
 using Application.DependencyInjection;
+using ApplicationService.Extensions;
 using Infrastructure.DependencyInjection;
 using WebApi.Hubs;
 
@@ -8,9 +8,10 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services
     .AddApplication()
-    .AddInfrastructure(builder.Configuration);
+    .AddInfrastructure(builder.Configuration)
+    .AddWebApi();
     
-MapsterConfiguration.RegisterMappings();
+ 
 
 builder.Services.AddControllers();
  
@@ -32,17 +33,19 @@ builder.Services.AddCors(options =>
             .AllowCredentials();
     });
 });
-builder.Services.AddSignalR();
+ 
 
 
 var app = builder.Build();
 
+await app.ApplyMigrationsAsync();
+ 
 
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
-}
+} 
 app.UseCors("Frontend");
 
 app.UseAuthorization();

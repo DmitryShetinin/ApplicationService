@@ -18,5 +18,4 @@
 /home/hatelove/Desktop/projects/ApplicationService/src/Infrastructure/obj/Debug/net10.0/Infrastructure.pdb
 /home/hatelove/Desktop/projects/ApplicationService/src/Infrastructure/obj/Debug/net10.0/Infrastructure.genruntimeconfig.cache
 /home/hatelove/Desktop/projects/ApplicationService/src/Infrastructure/obj/Debug/net10.0/ref/Infrastructure.dll
-/home/hatelove/Desktop/projects/ApplicationService/src/Infrastructure/bin/Debug/net10.0/WebApi.dll
-/home/hatelove/Desktop/projects/ApplicationService/src/Infrastructure/bin/Debug/net10.0/WebApi.pdb
+/home/hatelove/Desktop/projects/ApplicationService/src/Infrastructure/bin/Debug/net10.0/Persistence/Scripts/seed.sql

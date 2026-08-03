@@ -16,6 +16,12 @@ export default function useTicketActions(addToast) {
         );
 
 
+    const replaceTicket =
+        useTicketStore(
+            x => x.replaceTicket
+        );
+
+
     const removeOptimisticTicket =
         useTicketStore(
             x => x.removeOptimisticTicket
@@ -41,7 +47,7 @@ export default function useTicketActions(addToast) {
             );
 
 
-        } catch(error) {
+        } catch (error) {
 
             console.error(error);
 
@@ -90,7 +96,7 @@ export default function useTicketActions(addToast) {
             );
 
 
-        } catch(error) {
+        } catch (error) {
 
             console.error(error);
 
@@ -109,28 +115,32 @@ export default function useTicketActions(addToast) {
         formData
     ) => {
 
-        const tempId =
-            crypto.randomUUID();
+        const tempId = crypto.randomUUID();
 
 
         const optimisticTicket = {
 
             id: tempId,
 
-            number:
-                "создание...",
+            number: "создание...",
 
 
             author: {
-                fullName:
-                    "Загрузка..."
+                id: formData.authorId,
+                firstName: "",
+                lastName: "Загрузка...",
+                patronymic: ""
             },
 
 
-            executor: {
-                fullName:
-                    "Загрузка..."
-            },
+            executor: formData.executorId
+                ? {
+                    id: formData.executorId,
+                    firstName: "",
+                    lastName: "Загрузка...",
+                    patronymic: ""
+                }
+                : null,
 
 
             description:
@@ -144,6 +154,9 @@ export default function useTicketActions(addToast) {
             status: 1,
 
 
+            allowedTransitions: [],
+
+
             pending: true
         };
 
@@ -155,29 +168,19 @@ export default function useTicketActions(addToast) {
             );
 
 
-            await createTicketRequest({
-
-                authorId:
-                    formData.authorId,
-
-
-                executorId:
-                    formData.executorId,
-
-
-                description:
-                    formData.description,
-
-
-                deadline:
-                    formData.deadline,
-
-
-                clientRequestId:
-                    tempId
-
+            const createdTicket = await createTicketRequest({
+                authorId: formData.authorId,
+                executorId: formData.executorId,
+                description: formData.description,
+                deadline: formData.deadline,
+                clientRequestId: tempId
             });
 
+
+            replaceTicket(
+                tempId,
+                createdTicket
+            );
 
             addToast(
                 "Тикет создан",
@@ -185,8 +188,7 @@ export default function useTicketActions(addToast) {
             );
 
 
-        } catch(error) {
-
+        } catch (error) {
 
             console.error(error);
 
@@ -200,9 +202,7 @@ export default function useTicketActions(addToast) {
                 error.message,
                 "error"
             );
-
         }
-
     };
 
 
@@ -223,7 +223,7 @@ export default function useTicketActions(addToast) {
             );
 
 
-        } catch(error) {
+        } catch (error) {
 
 
             console.error(error);

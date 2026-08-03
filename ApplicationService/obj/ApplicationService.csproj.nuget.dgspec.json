@@ -544,9 +544,6 @@
             "projectReferences": {
               "/home/hatelove/Desktop/projects/ApplicationService/src/Core/Core.csproj": {
                 "projectPath": "/home/hatelove/Desktop/projects/ApplicationService/src/Core/Core.csproj"
-              },
-              "/home/hatelove/Desktop/projects/ApplicationService/src/WebApi/WebApi.csproj": {
-                "projectPath": "/home/hatelove/Desktop/projects/ApplicationService/src/WebApi/WebApi.csproj"
               }
             }
           }
@@ -1602,7 +1599,11 @@
           "net10.0": {
             "framework": "net10.0",
             "targetAlias": "net10.0",
-            "projectReferences": {}
+            "projectReferences": {
+              "/home/hatelove/Desktop/projects/ApplicationService/src/Application/Application.csproj": {
+                "projectPath": "/home/hatelove/Desktop/projects/ApplicationService/src/Application/Application.csproj"
+              }
+            }
           }
         },
         "warningProperties": {

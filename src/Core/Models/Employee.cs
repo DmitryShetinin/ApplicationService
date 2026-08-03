@@ -9,22 +9,26 @@ public sealed class Employee
   {
   }
 
-  public Employee(
-      Guid id,
-      FullName fullName,
+  private Employee(
+      string firstName,
+      string lastName,
+      string middleName,
       Department department,
       Position position)
   {
-    Id = id;
-    FullName = fullName;
+    Id = Guid.NewGuid();
+    FirstName = firstName;
+    LastName = lastName;
+    MiddleName = middleName;
     Department = department;
     Position = position;
   }
 
   public Guid Id { get; private set; }
 
-  public FullName FullName { get; private set; }
-
+  public string FirstName { get; private set; }
+  public string LastName { get; private set; }
+  public string MiddleName { get; private set; }
   public Guid DepartmentId { get; private set; }
   public Department Department { get; private set; } = null!;
 
@@ -32,33 +36,40 @@ public sealed class Employee
   public Position Position { get; private set; } = null!;
 
   public void ChangeDepartment(Department department)
-{
+  {
+    ArgumentNullException.ThrowIfNull(department);
     Department = department;
     DepartmentId = department.Id;
-}
+  }
 
   public static Employee Create(
-    FullName fullName,
+    string firstName,
+    string lastName,
+    string? middleName,
     Department department,
     Position position)
-{
-    ArgumentNullException.ThrowIfNull(fullName);
+  {
+  
+    ArgumentNullException.ThrowIfNull(lastName);
+ 
     ArgumentNullException.ThrowIfNull(department);
     ArgumentNullException.ThrowIfNull(position);
 
     return new Employee(
-        Guid.NewGuid(),
-        fullName,
+ 
+        firstName,
+        lastName,
+        middleName,
         department,
         position);
-}
+  }
 
 
 
   public void ChangePosition(Position position)
   {
     Position = position;
-    PositionId = position.Id; 
+    PositionId = position.Id;
 
   }
 }

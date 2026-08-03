@@ -60,10 +60,7 @@ export default function useTicketHub() {
             "TicketUpdated",
             (ticket) => {
 
-                console.log(
-                    "SIGNALR UPDATE",
-                    ticket
-                );
+                
 
 
                 updateTicket(ticket);
@@ -81,11 +78,7 @@ export default function useTicketHub() {
             "TicketCreated",
             (ticket) => {
 
-                console.log(
-                    "SIGNALR CREATED",
-                    ticket
-                );
-
+               
 
                 if (
                     ticket.clientRequestId
@@ -116,10 +109,7 @@ export default function useTicketHub() {
             "TicketDeleted",
             (ticketId) => {
 
-                console.log(
-                    "SIGNALR DELETE",
-                    ticketId
-                );
+               
 
 
                 removeTicket(ticketId);
@@ -137,10 +127,7 @@ export default function useTicketHub() {
             "NotificationReceived",
             (notification) => {
 
-                console.log(
-                    "SIGNALR NOTIFICATION",
-                    notification
-                );
+               
 
 
                 addNotification(
@@ -159,9 +146,7 @@ export default function useTicketHub() {
         connection.start()
             .then(() => {
 
-                console.log(
-                    "SignalR connected"
-                );
+              
 
             })
             .catch(error => {

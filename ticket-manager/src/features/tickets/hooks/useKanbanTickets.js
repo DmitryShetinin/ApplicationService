@@ -62,12 +62,7 @@ export default function useKanbanTickets() {
 
             const column = columns[status];
 
-            console.log(
-                "LOAD MORE",
-                status,
-                column
-            );
-
+         
 
             if (!column)
                 return;
@@ -76,24 +71,14 @@ export default function useKanbanTickets() {
             const nextPage = column.page + 1;
 
 
-            console.log(
-                "NEXT PAGE",
-                nextPage
-            );
+       
 
 
             if (
                 column.loading ||
                 nextPage > column.totalPages
             ) {
-                console.log(
-                    "BLOCKED",
-                    {
-                        loading: column.loading,
-                        nextPage,
-                        totalPages: column.totalPages
-                    }
-                );
+                 
 
                 return;
             }
@@ -106,11 +91,7 @@ export default function useKanbanTickets() {
             });
 
 
-            console.log(
-                "SERVER RESULT",
-                result
-            );
-
+         
 
             appendTickets(
                 status,

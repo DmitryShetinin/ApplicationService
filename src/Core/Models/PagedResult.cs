@@ -6,10 +6,8 @@ public sealed record PagedResult<T>(
     IReadOnlyCollection<T> Items,
     int Page,
     int PageSize,
-    int TotalCount)
+    bool HasNextPage)
 {
-    public int TotalPages =>
-        (int)Math.Ceiling(
-            TotalCount / (double)PageSize);
+    
 }
 

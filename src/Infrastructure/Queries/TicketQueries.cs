@@ -1,4 +1,5 @@
 
+using System.Diagnostics;
 using Application.Common;
 using Application.Features.Tickets.Requests;
 using Application.Features.Tickets.Responses;
@@ -90,106 +91,117 @@ public sealed class TicketQueries : ITicketQueries
                 new PagedResult<TicketResponse>(
                     result,
                     page,
-                    pageSize, true 
+                    pageSize, true
                 )
             );
     }
 
 
-    public async Task<Result<KanbanResponse>> GetKanbanAsync(
-      CancellationToken cancellationToken)
+ public async Task<Result<KanbanResponse>> GetKanbanAsync(
+    CancellationToken cancellationToken)
+{
+    const int pageSize = 20;
+
+     
+
+
+    var newColumn =
+        await GetColumnAsync(
+            TicketStatus.New,
+            pageSize,
+            cancellationToken);
+
+
+    var processingColumn =
+        await GetColumnAsync(
+            TicketStatus.Processing,
+            pageSize,
+            cancellationToken);
+
+
+    var completedColumn =
+        await GetColumnAsync(
+            TicketStatus.Completed,
+            pageSize,
+            cancellationToken);
+
+
+ 
+
+
+    return Result<KanbanResponse>.Success(
+        new KanbanResponse
+        {
+            New = newColumn,
+
+            InProgress = processingColumn,
+
+            Completed = completedColumn
+        });
+}
+
+
+private async Task<KanbanColumnResponse> GetColumnAsync(
+    TicketStatus status,
+    int pageSize,
+    CancellationToken cancellationToken)
+{
+    var tickets =
+        await _context.Tickets
+
+            .AsNoTracking()
+
+            .Where(x =>
+                x.Status == status)
+
+            .OrderByDescending(x =>
+                x.CreatedAt)
+
+            .Take(pageSize + 1)
+
+            .ProjectToType<TicketResponse>()
+
+            .ToListAsync(cancellationToken);
+
+
+
+    var hasNextPage =
+        tickets.Count > pageSize;
+
+
+
+    if (hasNextPage)
     {
-        const int pageSize = 20;
-
-
-        var newTickets = await _context.Tickets
-                        .AsNoTracking()
-                        .IncludeEmployees()
-                        .Where(x => x.Status == TicketStatus.New)
-                        .OrderByDescending(x => x.CreatedAt)
-                        .Take(pageSize)
-                        .ToListAsync(cancellationToken);
-
-
-        var processingTickets = await _context.Tickets
-                                .AsNoTracking()
-                                .IncludeEmployees()
-                                .Where(x => x.Status == TicketStatus.Processing)
-                                .OrderByDescending(x => x.CreatedAt)
-                                .Take(pageSize)
-                                .ToListAsync(cancellationToken);
-
-       
-        var completedTickets = await _context.Tickets
-                                .AsNoTracking()
-                                .IncludeEmployees()
-                                .Where(x => x.Status == TicketStatus.Completed)
-                                .OrderByDescending(x => x.CreatedAt)
-                                .Take(pageSize)
-                                .ToListAsync(cancellationToken);
-
-  
-
-        var newCount = await _context.Tickets
-            .CountAsync(
-                x => x.Status == TicketStatus.New,
-                cancellationToken);
-
-
-        var processingCount = await _context.Tickets
-            .CountAsync(
-                x => x.Status == TicketStatus.Processing,
-                cancellationToken);
-
-
-        var completedCount = await _context.Tickets
-            .CountAsync(
-                x => x.Status == TicketStatus.Completed,
-                cancellationToken);
-
-
-
-        return Result<KanbanResponse>.Success(
-            new KanbanResponse
-            {
-                New = new KanbanColumnResponse
-                {
-                    Items = newTickets.ToResponse(),
-
-                    Page = 1,
-
-                    TotalCount = newCount,
-
-                    TotalPages = (int)Math.Ceiling(
-                        newCount / (double)pageSize)
-                },
-
-
-                InProgress = new KanbanColumnResponse
-                {
-                    Items = processingTickets.ToResponse(),
-
-                    Page = 1,
-
-                    TotalCount = processingCount,
-
-                    TotalPages = (int)Math.Ceiling(
-                        processingCount / (double)pageSize)
-                },
-
-
-                Completed = new KanbanColumnResponse
-                {
-                    Items = completedTickets.ToResponse(),
-
-                    Page = 1,
-
-                    TotalCount = completedCount,
-
-                    TotalPages = (int)Math.Ceiling(
-                        completedCount / (double)pageSize)
-                }
-            });
+        tickets.RemoveAt(
+            tickets.Count - 1);
     }
 
+
+
+    var result =
+        tickets
+            .Select(AddTransitions)
+            .ToList();
+
+
+
+    return new KanbanColumnResponse
+    {
+        Items = result,
+
+        Page = 1,
+
+        HasNextPage = hasNextPage
+    };
+}
+private TicketResponse AddTransitions(
+    TicketResponse ticket)
+{
+    return ticket with
+    {
+        AllowedTransitions =
+            _stateMachine.GetAllowedTransitions(
+                ticket.Status)
+    };
+}
 }

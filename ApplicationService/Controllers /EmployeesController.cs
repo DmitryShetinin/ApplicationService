@@ -65,7 +65,7 @@ public sealed class EmployeesController : ControllerBase
         CancellationToken cancellationToken)
     {
         var employees =
-            await _employeeService.GetAsync(
+            await _employeeService.GetEmployeesAsync(
                 cancellationToken);
 
 

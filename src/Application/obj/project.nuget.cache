@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "gdnHpZc4dpk=",
+  "dgSpecHash": "vkVBe9FJk+Q=",
   "success": true,
   "projectFilePath": "/home/hatelove/Desktop/projects/ApplicationService/src/Application/Application.csproj",
   "expectedPackageFiles": [
@@ -8,26 +8,6 @@
     "/home/hatelove/.nuget/packages/mapster.core/10.0.11/mapster.core.10.0.11.nupkg.sha512",
     "/home/hatelove/.nuget/packages/mapster.dependencyinjection/10.0.11/mapster.dependencyinjection.10.0.11.nupkg.sha512",
     "/home/hatelove/.nuget/packages/mapster.efcore/10.0.11/mapster.efcore.10.0.11.nupkg.sha512",
-    "/home/hatelove/.nuget/packages/microsoft.aspnetcore.authentication.abstractions/2.3.0/microsoft.aspnetcore.authentication.abstractions.2.3.0.nupkg.sha512",
-    "/home/hatelove/.nuget/packages/microsoft.aspnetcore.authorization/2.3.0/microsoft.aspnetcore.authorization.2.3.0.nupkg.sha512",
-    "/home/hatelove/.nuget/packages/microsoft.aspnetcore.authorization.policy/2.3.0/microsoft.aspnetcore.authorization.policy.2.3.0.nupkg.sha512",
-    "/home/hatelove/.nuget/packages/microsoft.aspnetcore.connections.abstractions/2.3.0/microsoft.aspnetcore.connections.abstractions.2.3.0.nupkg.sha512",
-    "/home/hatelove/.nuget/packages/microsoft.aspnetcore.hosting.abstractions/2.3.0/microsoft.aspnetcore.hosting.abstractions.2.3.0.nupkg.sha512",
-    "/home/hatelove/.nuget/packages/microsoft.aspnetcore.hosting.server.abstractions/2.3.0/microsoft.aspnetcore.hosting.server.abstractions.2.3.0.nupkg.sha512",
-    "/home/hatelove/.nuget/packages/microsoft.aspnetcore.http/2.3.0/microsoft.aspnetcore.http.2.3.0.nupkg.sha512",
-    "/home/hatelove/.nuget/packages/microsoft.aspnetcore.http.abstractions/2.3.0/microsoft.aspnetcore.http.abstractions.2.3.0.nupkg.sha512",
-    "/home/hatelove/.nuget/packages/microsoft.aspnetcore.http.connections/1.2.0/microsoft.aspnetcore.http.connections.1.2.0.nupkg.sha512",
-    "/home/hatelove/.nuget/packages/microsoft.aspnetcore.http.connections.common/1.2.0/microsoft.aspnetcore.http.connections.common.1.2.0.nupkg.sha512",
-    "/home/hatelove/.nuget/packages/microsoft.aspnetcore.http.extensions/2.3.9/microsoft.aspnetcore.http.extensions.2.3.9.nupkg.sha512",
-    "/home/hatelove/.nuget/packages/microsoft.aspnetcore.http.features/2.3.0/microsoft.aspnetcore.http.features.2.3.0.nupkg.sha512",
-    "/home/hatelove/.nuget/packages/microsoft.aspnetcore.routing/2.3.0/microsoft.aspnetcore.routing.2.3.0.nupkg.sha512",
-    "/home/hatelove/.nuget/packages/microsoft.aspnetcore.routing.abstractions/2.3.0/microsoft.aspnetcore.routing.abstractions.2.3.0.nupkg.sha512",
-    "/home/hatelove/.nuget/packages/microsoft.aspnetcore.signalr/1.2.11/microsoft.aspnetcore.signalr.1.2.11.nupkg.sha512",
-    "/home/hatelove/.nuget/packages/microsoft.aspnetcore.signalr.common/1.2.0/microsoft.aspnetcore.signalr.common.1.2.0.nupkg.sha512",
-    "/home/hatelove/.nuget/packages/microsoft.aspnetcore.signalr.core/1.2.0/microsoft.aspnetcore.signalr.core.1.2.0.nupkg.sha512",
-    "/home/hatelove/.nuget/packages/microsoft.aspnetcore.signalr.protocols.json/1.2.0/microsoft.aspnetcore.signalr.protocols.json.1.2.0.nupkg.sha512",
-    "/home/hatelove/.nuget/packages/microsoft.aspnetcore.websockets/2.3.10/microsoft.aspnetcore.websockets.2.3.10.nupkg.sha512",
-    "/home/hatelove/.nuget/packages/microsoft.aspnetcore.webutilities/2.3.0/microsoft.aspnetcore.webutilities.2.3.0.nupkg.sha512",
     "/home/hatelove/.nuget/packages/microsoft.entityframeworkcore/9.0.0/microsoft.entityframeworkcore.9.0.0.nupkg.sha512",
     "/home/hatelove/.nuget/packages/microsoft.entityframeworkcore.abstractions/9.0.0/microsoft.entityframeworkcore.abstractions.9.0.0.nupkg.sha512",
     "/home/hatelove/.nuget/packages/microsoft.entityframeworkcore.analyzers/9.0.0/microsoft.entityframeworkcore.analyzers.9.0.0.nupkg.sha512",
@@ -38,31 +18,11 @@
     "/home/hatelove/.nuget/packages/microsoft.extensions.configuration.binder/10.0.10/microsoft.extensions.configuration.binder.10.0.10.nupkg.sha512",
     "/home/hatelove/.nuget/packages/microsoft.extensions.dependencyinjection/9.0.0/microsoft.extensions.dependencyinjection.9.0.0.nupkg.sha512",
     "/home/hatelove/.nuget/packages/microsoft.extensions.dependencyinjection.abstractions/10.0.10/microsoft.extensions.dependencyinjection.abstractions.10.0.10.nupkg.sha512",
-    "/home/hatelove/.nuget/packages/microsoft.extensions.diagnostics.abstractions/8.0.1/microsoft.extensions.diagnostics.abstractions.8.0.1.nupkg.sha512",
-    "/home/hatelove/.nuget/packages/microsoft.extensions.fileproviders.abstractions/8.0.0/microsoft.extensions.fileproviders.abstractions.8.0.0.nupkg.sha512",
-    "/home/hatelove/.nuget/packages/microsoft.extensions.hosting.abstractions/8.0.1/microsoft.extensions.hosting.abstractions.8.0.1.nupkg.sha512",
     "/home/hatelove/.nuget/packages/microsoft.extensions.logging/9.0.0/microsoft.extensions.logging.9.0.0.nupkg.sha512",
     "/home/hatelove/.nuget/packages/microsoft.extensions.logging.abstractions/9.0.0/microsoft.extensions.logging.abstractions.9.0.0.nupkg.sha512",
-    "/home/hatelove/.nuget/packages/microsoft.extensions.objectpool/8.0.11/microsoft.extensions.objectpool.8.0.11.nupkg.sha512",
     "/home/hatelove/.nuget/packages/microsoft.extensions.options/10.0.10/microsoft.extensions.options.10.0.10.nupkg.sha512",
     "/home/hatelove/.nuget/packages/microsoft.extensions.options.configurationextensions/10.0.10/microsoft.extensions.options.configurationextensions.10.0.10.nupkg.sha512",
-    "/home/hatelove/.nuget/packages/microsoft.extensions.primitives/10.0.10/microsoft.extensions.primitives.10.0.10.nupkg.sha512",
-    "/home/hatelove/.nuget/packages/microsoft.net.http.headers/2.3.8/microsoft.net.http.headers.2.3.8.nupkg.sha512",
-    "/home/hatelove/.nuget/packages/newtonsoft.json/11.0.2/newtonsoft.json.11.0.2.nupkg.sha512",
-    "/home/hatelove/.nuget/packages/system.net.websockets.websocketprotocol/5.1.0/system.net.websockets.websocketprotocol.5.1.0.nupkg.sha512"
+    "/home/hatelove/.nuget/packages/microsoft.extensions.primitives/10.0.10/microsoft.extensions.primitives.10.0.10.nupkg.sha512"
   ],
-  "logs": [
-    {
-      "code": "NU1903",
-      "level": "Warning",
-      "message": "Package 'Newtonsoft.Json' 11.0.2 has a known high severity vulnerability, https://github.com/advisories/GHSA-5crp-9r3c-p9vr",
-      "projectPath": "/home/hatelove/Desktop/projects/ApplicationService/src/Application/Application.csproj",
-      "warningLevel": 1,
-      "filePath": "/home/hatelove/Desktop/projects/ApplicationService/src/Application/Application.csproj",
-      "libraryId": "Newtonsoft.Json",
-      "targetGraphs": [
-        "net10.0"
-      ]
-    }
-  ]
+  "logs": []
 }
