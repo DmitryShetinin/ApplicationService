@@ -16,6 +16,36 @@ export async function getKanbanTickets(){
 }
 
 
+export async function updateTicket(id, request) {
+    const response = await fetch(`${API_URL}/${id}`, {
+        method: "PUT",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify(request)
+    });
+
+    if (!response.ok) {
+        throw new Error(await response.text());
+    }
+}
+
+export async function createTicket(request) {
+    const response = await fetch(`${API_URL}/`, {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify(request)
+    });
+
+    if (!response.ok) {
+        throw new Error(await response.text());
+    }
+
+    return await response.json();
+}
+
 export async function changeTicketExecutor(ticketId, executorId) {
       const response = await fetch(
           `${API_URL}/${ticketId}/executor`,
@@ -116,4 +146,23 @@ if(filters.onlyOverdue)
 
 
     return await response.json();
+}
+
+
+export async function deleteTicket(id) {
+
+    const response = await fetch(
+        `http://localhost:5353/api/tickets/${id}`,
+        {
+            method: "DELETE"
+        }
+    );
+
+
+    if (!response.ok) {
+        throw new Error(
+            "Ошибка удаления тикета"
+        );
+    }
+
 }

@@ -11,15 +11,7 @@ const STATUS_CLASS = {
   3: "status-completed"
 };
 
-export function getInitials(fullName) {
-  if (!fullName) return '??';
-  const parts = fullName.trim().split(/\s+/);
-  if (parts.length < 2) return parts[0]?.[0]?.toUpperCase() ?? '?';
-  const lastName = parts[0];
-  const firstName = parts[1];
-  return `${firstName[0]}${lastName[0]}`.toUpperCase();
-}
-
+ 
 export default function TicketCard({
   ticket,
   author,
@@ -76,16 +68,16 @@ export default function TicketCard({
       <div className="ticket-meta ticket-meta-people">
         <span className="ticket-meta-item">
           <span className="ticket-avatar author">
-            {getInitials(author.fullName)}
+            {author?.lastName[0]+author?.firstName[0]}
           </span>
-          {author?.fullName} ({author?.department})
+          {author?.lastName  + " " + author?.firstName + " " + author?.middleName} ({author?.department})
         </span>
 
         <span className="ticket-meta-item">
           <span className="ticket-avatar executor">
-            {getInitials(executor?.fullName)}
+            {author?.lastName[0]+author?.firstName[0]}
           </span>
-          {executor?.fullName} ({executor?.department})
+          {executor?.lastName  + " " + executor?.firstName + " " + executor?.middleName} ({executor?.department})
         </span>
       </div>
 

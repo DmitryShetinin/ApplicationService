@@ -332,9 +332,17 @@ body {
 @keyframes fadeIn { from { opacity:0; } to { opacity:1; } }
 @keyframes slideUp { from { transform:translateY(30px); opacity:0; } to { transform:translateY(0); opacity:1; } }
 .modal {
-  background:var(--surface); border-radius:var(--radius); border:1px solid var(--border);
-  width:100%; max-width:520px; box-shadow:var(--shadow-lg);
-  animation:slideUp 0.25s ease; max-height:90vh; display:flex; flex-direction:column;
+  background: var(--surface);
+  border-radius: var(--radius);
+  border: 1px solid var(--border);
+  width: fit-content;             
+  min-width: 320px;                
+  max-width: 90vw;                  
+  box-shadow: var(--shadow-lg);
+  animation: slideUp 0.25s ease;
+  max-height: 90vh;
+  display: flex;
+  flex-direction: column;
 }
 .modal-header { padding:18px 20px; border-bottom:1px solid var(--border); display:flex; justify-content:space-between; align-items:center; }
 .modal-header h3 { font-size:17px; font-weight:700; color:#fff; }

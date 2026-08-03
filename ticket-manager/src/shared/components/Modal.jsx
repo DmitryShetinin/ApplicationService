@@ -11,50 +11,87 @@ export default function Modal({
   ticket,
   employees = [],
   onSave,
+  onCreate,
   onClose
 }) {
   const isEdit = type === "edit" && !!ticket;
-  const defaultDeadline = new Date(Date.now() + 3 * 24 * 60 * 60 * 1000).toISOString().slice(0,16);
+  const defaultDeadline = new Date(Date.now() + 3 * 24 * 60 * 60 * 1000).toISOString().slice(0, 16);
 
   const [description, setDescription] = useState("");
   const [authorId, setAuthorId] = useState("");
   const [executorId, setExecutorId] = useState("");
   const [status, setStatus] = useState(1);
   const [deadline, setDeadline] = useState(defaultDeadline);
-  const [statusOptions, setStatusOptions] = useState([1,2,3]); // по умолчанию все
+  const [version, setVersion] = useState(0);
+  const [statusOptions, setStatusOptions] = useState([1, 2, 3]); // по умолчанию все
 
   useEffect(() => {
+
     if (!ticket) {
-      // Если создаём новый тикет, показываем все статусы
-      setStatusOptions([1,2,3]);
-      // Сброс полей
+
+      setStatusOptions([1, 2, 3]);
+
       setDescription("");
-      setAuthorId("");
-      setExecutorId("");
+
+      setAuthorId(
+        employees[0]?.id ?? ""
+      );
+
+      setExecutorId(
+        employees[0]?.id ?? ""
+      );
+
       setStatus(1);
+
       setDeadline(defaultDeadline);
+
+      setVersion(0);
+
       return;
     }
 
-    // Заполняем поля из ticket
+
     setDescription(ticket.description ?? "");
+
     setAuthorId(ticket.author?.id ?? "");
+
     setExecutorId(ticket.executor?.id ?? "");
+
     const currentStatus = Number(ticket.status ?? 1);
+
     setStatus(currentStatus);
+
+    setVersion(ticket.version ?? 0);
+
     setDeadline(
       ticket.deadline
-        ? new Date(ticket.deadline).toISOString().slice(0,16)
+        ? new Date(ticket.deadline)
+          .toISOString()
+          .slice(0, 16)
         : defaultDeadline
     );
 
-    // Собираем уникальные статусы: текущий + все переходы
-    const transitions = ticket.allowedTransitions ?? [];
-    const statusSet = new Set([currentStatus]);
-    transitions.forEach(t => statusSet.add(t.status));
-    const sorted = Array.from(statusSet).sort((a,b) => a-b);
-    setStatusOptions(sorted);
-  }, [ticket]); // ticket не меняется внутри модалки, поэтому список фиксирован
+
+    const transitions =
+      ticket.allowedTransitions ?? [];
+
+
+    const statusSet =
+      new Set([currentStatus]);
+
+
+    transitions.forEach(t =>
+      statusSet.add(t.status)
+    );
+
+
+    setStatusOptions(
+      Array.from(statusSet)
+        .sort((a, b) => a - b)
+    );
+
+
+  }, [ticket, employees]);
 
   const getEmployeeName = (employee) => {
     return (
@@ -73,9 +110,24 @@ export default function Modal({
       authorId,
       executorId,
       status,
-      deadline: new Date(deadline).toISOString()
+      deadline: new Date(deadline).toISOString(),
+      version
     });
   };
+
+  const handleCreate = (e) => {
+    e.preventDefault();
+    if (!description.trim()) return;
+    onCreate({
+      description: description.trim(),
+      authorId,
+      executorId,
+      status,
+      deadline: new Date(deadline).toISOString(),
+      version
+    });
+  };
+
 
   return (
     <div className="modal-overlay" onClick={(e) => {
@@ -92,7 +144,7 @@ export default function Modal({
           </h3>
           <button className="modal-close" onClick={onClose}>×</button>
         </div>
-        <form className="modal-body" onSubmit={handleSubmit}>
+        <form className="modal-body" onSubmit={isEdit ? handleSubmit : handleCreate}>
           <div className="form-group">
             <label>Описание</label>
             <textarea

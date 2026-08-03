@@ -8,8 +8,7 @@ export default function Report({
     const loaderRef=useRef(null);
 
     const [visibleCount,setVisibleCount]=useState(2);
-console.log(report.executors.length);
-console.log(report.executors);
+ 
     useEffect(()=>{
 
         if(!loaderRef.current)

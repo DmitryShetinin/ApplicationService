@@ -1,0 +1,77 @@
+.notification-wrapper{
+    position:relative;
+}
+
+
+.notification-button{
+
+    position:relative;
+
+    background:none;
+    border:none;
+
+    font-size:24px;
+
+    cursor:pointer;
+
+}
+
+
+.notification-count{
+
+    position:absolute;
+
+    top:-5px;
+    right:-8px;
+
+    background:red;
+
+    color:white;
+
+    border-radius:50%;
+
+    font-size:12px;
+
+    width:18px;
+    height:18px;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+}
+
+
+
+.notification-dropdown{
+
+    position:absolute;
+
+    right:0;
+    top:40px;
+
+    width:300px;
+
+    background:rgb(8, 8, 8);
+
+    border-radius:10px;
+
+    box-shadow:
+        0 5px 20px rgba(0,0,0,.15);
+
+
+    padding:10px;
+
+    z-index:1000;
+
+}
+
+
+
+.notification-item{
+
+    padding:10px;
+
+    border-bottom:1px solid #eee;
+
+}

@@ -17,8 +17,8 @@
     import Report from "../../features/reports/Report.jsx";
 
 
-    import { useTicketActions } from "../../features/tickets/hooks/useTicketActions.js";
-    import useTicketHub from "../../features/tickets/services/signalr.js";
+    import  useTicketActions  from "../../features/tickets/hooks/useTicketActions.js";
+    import useTicketHub from "../../features/tickets/hooks/useTicketHub.js";
 
     export default function TicketManager() {
 
@@ -58,13 +58,14 @@
         const {
             moveTicket,
             updateTicket,
-            deleteTicket
+            deleteTicket,
+            createTicket
         } = useTicketActions(
-            reloadTickets,
+    
             console.log
         );
-
-        useTicketHub(reloadTickets);
+        
+        useTicketHub();
 
         const counts = useMemo(() => ({
             1: columns[1].items.length,
@@ -93,6 +94,16 @@
         const handleSave = async (formData) => {
             await updateTicket(
                 modal.ticket,
+                formData
+            );
+
+            closeModal();
+        };
+
+           const handleCreate = async (formData) => {
+            
+            createTicket(
+   
                 formData
             );
 
@@ -179,6 +190,7 @@
                         ticket={modal.ticket}
                         employees={employees}
                         onSave={handleSave}
+                        onCreate={handleCreate}
                         onClose={closeModal}
                     />
                 )}

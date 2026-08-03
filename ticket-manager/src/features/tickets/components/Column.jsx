@@ -34,46 +34,50 @@ export default function Column({
 
   const [dragOver, setDragOver] = useState(false);
 
- 
-   
+
+
+
+  
   const bodyRef = useRef(null);
   const loaderRef = useRef(null);
- 
+
   useEffect(() => {
 
     if (!loaderRef.current || !bodyRef.current)
       return;
 
-    const observer = new IntersectionObserver(
+    const observer = new IntersectionObserver(entries => {
 
-      entries => {
+      const entry = entries[0];
 
-        if (entries[0].isIntersecting) {
-          console.log("LOAD");
-          onLoadMore();
-        }
+      if (!entry.isIntersecting)
+        return;
 
-      },
+      if (loading)
+        return;
 
-      {
-        root: bodyRef.current,
-        threshold: 0.1
-      }
+      onLoadMore();
 
-    );
+    }, {
+      root: bodyRef.current,
+      threshold: 0.1
+    });
 
     observer.observe(loaderRef.current);
 
     return () => observer.disconnect();
 
-  }, [onLoadMore]);
+  }, [
+    tickets.length,
+    loading
+  ]);
 
   const canDrop =
     draggedTicket &&
     draggedTicket.allowedTransitions?.some(
       x => x.status === status
     );
-    
+
   const handleDragOver = e => {
     e.preventDefault();
     setDragOver(true);

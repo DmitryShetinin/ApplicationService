@@ -8,7 +8,7 @@ export default function useEmployees(){
     const loadEmployees=useCallback(async()=>{
 
         const data=await getEmployees();
-
+        console.log(data)
         setEmployees(data);
 
     },[]);

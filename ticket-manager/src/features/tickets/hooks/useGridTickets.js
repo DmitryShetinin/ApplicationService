@@ -1,8 +1,19 @@
 import { useEffect, useState, useCallback } from "react";
 import { getTickets } from "../api/ticketApi";
+import useTicketStore from "../../../store/ticketStore";
+
 
 export default function useGridTickets() {
-    const [tickets, setTickets] = useState([]);
+
+
+    const tickets = useTicketStore(
+        x => x.gridTickets
+    );
+
+    const setGridTickets = useTicketStore(
+        x => x.setGridTickets
+    );
+
 
     const [pageInfo, setPageInfo] = useState({
         page: 1,
@@ -25,7 +36,7 @@ export default function useGridTickets() {
             pageSize: pageInfo.pageSize
         });
 
-        setTickets(result.items);
+        setGridTickets(result.items);
 
         setPageInfo(prev => ({
             ...prev,
