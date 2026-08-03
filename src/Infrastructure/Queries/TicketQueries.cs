@@ -90,8 +90,7 @@ public sealed class TicketQueries : ITicketQueries
                 new PagedResult<TicketResponse>(
                     result,
                     page,
-                    pageSize,
-                    totalCount
+                    pageSize, true 
                 )
             );
     }

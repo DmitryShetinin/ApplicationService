@@ -5,11 +5,9 @@ using Core.Enums;
 using Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
 
-
 namespace Infrastructure.Queries;
 
-public sealed class ReportQueries
-    : IReportQueries
+public sealed class ReportQueries : IReportQueries
 {
     private readonly AppDbContext _context;
 
@@ -22,122 +20,121 @@ public sealed class ReportQueries
     public async Task<Result<ReportResponse>> GetAsync(
         CancellationToken cancellationToken)
     {
-        var total =
-            await _context.Tickets.AsNoTracking()
-                .CountAsync(cancellationToken);
+        var now = DateTime.UtcNow;
 
-        var @new =
-            await _context.Tickets.AsNoTracking()
-                .CountAsync(
-                    x => x.Status == TicketStatus.New,
-                    cancellationToken);
 
-        var processing =
-            await _context.Tickets.AsNoTracking()
-                .CountAsync(
-                    x => x.Status == TicketStatus.Processing,
-                    cancellationToken);
+        var statistics =
+            await _context.Tickets
+                .AsNoTracking()
+                .GroupBy(x => 1)
+                .Select(x => new
+                {
+                    Total = x.Count(),
 
-        var completed =
-            await _context.Tickets.AsNoTracking()
-                .CountAsync(
-                    x => x.Status == TicketStatus.Completed,
-                    cancellationToken);
+                    New =
+                        x.Count(t =>
+                            t.Status == TicketStatus.New),
 
-        var overdue =
-            await _context.Tickets.AsNoTracking()
-                .CountAsync(
-                    x =>
-                        x.Status != TicketStatus.Completed &&
-                        x.Deadline < DateTime.UtcNow,
-                    cancellationToken);
+                    Processing =
+                        x.Count(t =>
+                            t.Status == TicketStatus.Processing),
 
-        var completedTickets =
-            await _context.Tickets.AsNoTracking()
+                    Completed =
+                        x.Count(t =>
+                            t.Status == TicketStatus.Completed),
+
+                    Overdue =
+                        x.Count(t =>
+                            t.Status != TicketStatus.Completed &&
+                            t.Deadline < now)
+                })
+                .FirstAsync(cancellationToken);
+
+
+
+        var departmentData =
+            await _context.Tickets
+                .AsNoTracking()
+
                 .Where(x =>
-                    x.Status == TicketStatus.Completed)
+                    x.Executor != null)
+
+                .GroupBy(x =>
+                    x.Executor!.Department.Name)
+
+                .Select(x => new
+                {
+                    Department = x.Key,
+                    Tickets = x.Count()
+                })
+
+                .OrderByDescending(x =>
+                    x.Tickets)
+
                 .ToListAsync(cancellationToken);
 
 
 
-        var departmentData = await _context.Tickets.AsNoTracking()
-
-        .GroupBy(x => x.Executor.Department.Name)
-
-        .Select(x => new
-        {
-            Department = x.Key,
-            Tickets = x.Count()
-        })
-
-        .OrderByDescending(x => x.Tickets)
-
-        .ToListAsync(cancellationToken);
-
         var departments =
             departmentData
-
                 .Select(x =>
                     new DepartmentStatResponse(
                         x.Department,
                         x.Tickets))
-
                 .ToList();
 
-        var executorData = await _context.Tickets
-                                         .AsNoTracking()
-                                         .GroupBy(x => new
-                                         {
-                                            x.Executor.Id,
-                                            x.Executor.FullName
-                                         })
 
-        .Select(x => new
-        {
-            x.Key.Id,
-            x.Key.FullName,
-            Tickets = x.Count()
-        }).OrderByDescending(x => x.Tickets)
-          .Take(10)
-          .ToListAsync(cancellationToken);
+
+        var executorData =
+            await _context.Tickets
+                .AsNoTracking()
+
+                .Where(x =>
+                    x.Executor != null)
+
+                .GroupBy(x => new
+                {
+                    Id = x.Executor!.Id,
+                    FullName = x.Executor.FullName
+                })
+
+                .Select(x => new
+                {
+                    Id = x.Key.Id,
+                    FullName = x.Key.FullName,
+                    Tickets = x.Count()
+                })
+
+                .OrderByDescending(x =>
+                    x.Tickets)
+
+                .Take(10)
+
+                .ToListAsync(cancellationToken);
+
+
 
         var executors =
             executorData
                 .Select(x =>
                     new ExecutorStatResponse(
-
                         x.Id,
-
                         x.FullName.ToString(),
-
-                        x.Tickets
-
-                    ))
-
+                        x.Tickets))
                 .ToList();
 
+
+
         return Result<ReportResponse>.Success(
-
             new ReportResponse(
-
-                total,
-
-                @new,
-
-                processing,
-
-                completed,
-
-                overdue,
-
-
-
+                statistics.Total,
+                statistics.New,
+                statistics.Processing,
+                statistics.Completed,
+                statistics.Overdue,
                 departments,
-
                 executors
-
             )
-
         );
     }
 }
