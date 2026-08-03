@@ -1,6 +1,5 @@
 
-using Application.Features.Employees;
-using Application.Features.Tickets;
+ 
 using Core.Models;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -12,11 +11,14 @@ public static class DependencyInjection
       this IServiceCollection services)
   {
    
-    
+    services
+        .AddServices()
+        .AddMapping();
+
+    MapsterConfiguration.RegisterMappings();
     services.AddSingleton<TicketStateMachine>();
-    services.AddScoped<ITicketService, TicketService>();
-    services.AddScoped<IEmployeeService, EmployeeService>();
  
+     
  
        
 

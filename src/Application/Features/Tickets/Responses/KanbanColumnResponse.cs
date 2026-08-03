@@ -7,7 +7,5 @@ public sealed class KanbanColumnResponse
 
     public int Page { get; init; }
 
-    public int TotalPages { get; init; }
-
-    public int TotalCount { get; init; }
+    public bool HasNextPage { get; init; }
 }

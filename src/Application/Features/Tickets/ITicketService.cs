@@ -7,9 +7,13 @@ namespace Application.Features.Tickets;
 
 public interface ITicketService
 {
-    Task<Result<Guid>> CreateAsync(
+    Task<Result<TicketResponse>> CreateAsync(
         CreateTicketRequest request,
         CancellationToken cancellationToken);
+
+    Task<Result<bool>> DeleteAsync(
+    Guid ticketId,
+    CancellationToken cancellationToken);
 
 
     Task<Result<bool>> ChangeStatusAsync(
@@ -23,7 +27,10 @@ public interface ITicketService
         Guid executorId,
         CancellationToken cancellationToken);
 
-
+Task<Result<bool>> UpdateAsync(
+    Guid ticketId,
+    UpdateTicketRequest request,
+    CancellationToken cancellationToken);
      
 
 

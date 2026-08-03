@@ -10,13 +10,13 @@ namespace Infrastructure.Persistence.Repositories;
 public sealed class TicketRepository : ITicketRepository
 {
     private readonly AppDbContext _context;
-    private readonly TicketStateMachine _stateMachine;
+
 
     public TicketRepository(
-        AppDbContext context, TicketStateMachine stateMachine)
+        AppDbContext context)
     {
         _context = context;
-        _stateMachine = stateMachine;
+
     }
 
 
@@ -38,11 +38,31 @@ public sealed class TicketRepository : ITicketRepository
                 cancellationToken);
     }
 
+    public void SetOriginalVersion(
+        Ticket ticket,
+        int version)
+    {
+        _context.Entry(ticket)
+            .Property(x => x.Version)
+            .OriginalValue = version;
+    }
+
+
+    public async Task<int> GetNextNumberAsync(
+        CancellationToken cancellationToken)
+    {
+        var maxNumber = await _context.Tickets
+            .MaxAsync(
+                x => (int?)x.Number,
+                cancellationToken);
+
+        return (maxNumber ?? 0) + 1;
+    }
 
     public async Task<IReadOnlyCollection<Ticket>> GetAsync(
     TicketFilterRequest filter,
     CancellationToken cancellationToken)
-    {   
+    {
         var query = new TicketQueryBuilder(
             _context.Tickets,
             filter);
@@ -52,14 +72,14 @@ public sealed class TicketRepository : ITicketRepository
             .ToListAsync(cancellationToken);
     }
 
-        public async Task AddAsync(
-            Ticket ticket,
-            CancellationToken cancellationToken)
-        {
-            await _context.Tickets.AddAsync(
-                ticket,
-                cancellationToken);
-        }
+    public async Task AddAsync(
+        Ticket ticket,
+        CancellationToken cancellationToken)
+    {
+        await _context.Tickets.AddAsync(
+            ticket,
+            cancellationToken);
+    }
 
 
     public async Task SaveChangesAsync(
@@ -79,5 +99,12 @@ public sealed class TicketRepository : ITicketRepository
                 cancellationToken);
     }
 
-    
+
+    public void Remove(
+    Ticket ticket)
+    {
+        _context.Tickets.Remove(ticket);
+    }
+
+
 }

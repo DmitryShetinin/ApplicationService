@@ -170,3 +170,4 @@
 /home/hatelove/Desktop/projects/ApplicationService/ApplicationService/bin/Debug/net10.0/Mapster.EFCore.dll
 /home/hatelove/Desktop/projects/ApplicationService/ApplicationService/bin/Debug/net10.0/WebApi.dll
 /home/hatelove/Desktop/projects/ApplicationService/ApplicationService/bin/Debug/net10.0/WebApi.pdb
+/home/hatelove/Desktop/projects/ApplicationService/ApplicationService/bin/Debug/net10.0/Persistence/Scripts/seed.sql

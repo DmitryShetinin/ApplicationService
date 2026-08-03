@@ -41,5 +41,24 @@ public sealed class TicketConfiguration
             .WithMany()
             .HasForeignKey(x => x.ExecutorId)
             .OnDelete(DeleteBehavior.Restrict);
+
+        builder.HasIndex(x => new
+        {
+            x.ExecutorId,
+            x.Status,
+            x.Deadline
+        });
+
+        builder.HasIndex(x => new
+        {
+            x.Status,
+            x.CreatedAt
+        });
+
+        builder.HasIndex(x => x.AuthorId);
+
+
+        builder.Property<uint>("xmin")
+    .IsRowVersion();
     }
 }

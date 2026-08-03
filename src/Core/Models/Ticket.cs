@@ -15,7 +15,8 @@ public sealed class Ticket
       Employee author,
       Employee executor,
       string description,
-      DateTime deadline)
+      DateTime deadline,
+      Guid clientRequestId)
   {
     Id = id;
     Number = number;
@@ -26,13 +27,17 @@ public sealed class Ticket
 
     CreatedAt = DateTime.UtcNow;
     Status = TicketStatus.New;
+    ClientRequestId = clientRequestId;
   }
 
   public Guid Id { get; private set; }
 
-  public IReadOnlyCollection<TicketTransition> AllowedTransitions; 
+  public IReadOnlyCollection<TicketTransition> AllowedTransitions;
   public int Number { get; private set; }
 
+  public int Version { get; private set; } = 1;
+
+  public Guid? ClientRequestId { get; private set; }
   public DateTime CreatedAt { get; private set; }
 
   public Guid AuthorId { get; private set; }
@@ -41,15 +46,34 @@ public sealed class Ticket
   public Guid? ExecutorId { get; private set; }
   public Employee? Executor { get; private set; }
 
+  
+
   public string Description { get; private set; }
 
   public DateTime Deadline { get; private set; }
 
   public TicketStatus Status { get; private set; }
 
+
+  public void IncrementVersion()
+  {
+    Version++;
+  }
+  public void Edit(
+      Employee? executor,
+      string description,
+      DateTime deadline)
+  {
+    Executor = executor;
+    ExecutorId = executor.Id; 
+    Description = description;
+    Deadline = deadline;
+  }
   public void AssignExecutor(Employee employee)
   {
-    Executor = employee;
+        ArgumentNullException.ThrowIfNull(employee);
+      Executor = employee;
+    ExecutorId = employee.Id;
   }
 
   internal void SetStatus(TicketStatus status)
@@ -62,7 +86,8 @@ public sealed class Ticket
           Employee author,
           Employee executor,
           string description,
-          DateTime deadline)
+          DateTime deadline,
+          Guid clientRequestId)
   {
     ArgumentNullException.ThrowIfNull(author);
     ArgumentNullException.ThrowIfNull(executor);
@@ -84,7 +109,8 @@ public sealed class Ticket
         author,
         executor,
         description,
-        deadline);
+        deadline,
+        clientRequestId);
   }
 
 

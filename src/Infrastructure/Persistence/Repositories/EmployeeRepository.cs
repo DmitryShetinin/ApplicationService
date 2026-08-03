@@ -16,7 +16,7 @@ public sealed class EmployeeRepository : IEmployeeRepository
 
 
     public async Task<Employee?> GetByIdAsync(
-        Guid? id,
+        Guid id,
         CancellationToken cancellationToken)
     {
         return await _context.Employees
@@ -39,24 +39,19 @@ public sealed class EmployeeRepository : IEmployeeRepository
     }
 
 
-    public async Task AddAsync(
-        Employee employee,
-        CancellationToken cancellationToken)
+   public async Task AddAsync(
+    Employee employee,
+    CancellationToken cancellationToken)
     {
         await _context.Employees.AddAsync(
             employee,
             cancellationToken);
-
-        await _context.SaveChangesAsync(
-            cancellationToken);
     }
 
 
-    public async Task SaveChangesAsync(
-        Employee employee,
-        CancellationToken cancellationToken)
+    public async Task SaveChangesAsync(CancellationToken cancellationToken)
     {
-        _context.Employees.Update(employee);
+      
 
         await _context.SaveChangesAsync(
             cancellationToken);

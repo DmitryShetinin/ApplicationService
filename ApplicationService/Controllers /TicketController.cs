@@ -31,8 +31,8 @@ public sealed class TicketsController : ControllerBase
 
     [HttpPost]
     public async Task<IActionResult> Create(
-        CreateTicketRequest request,
-        CancellationToken cancellationToken)
+    CreateTicketRequest request,
+    CancellationToken cancellationToken)
     {
         var result =
             await _ticketService.CreateAsync(
@@ -50,12 +50,9 @@ public sealed class TicketsController : ControllerBase
             nameof(GetById),
             new
             {
-                id = result.Value
+                id = result.Value.Id
             },
-            new
-            {
-                id = result.Value
-            });
+            result.Value);
     }
 
 
@@ -170,4 +167,44 @@ public sealed class TicketsController : ControllerBase
 
         return NoContent();
     }
+
+    [HttpPut("{id:guid}")]
+    public async Task<IActionResult> Update(
+    Guid id,
+    [FromBody] UpdateTicketRequest request,
+    CancellationToken cancellationToken)
+    {
+        var result =
+            await _ticketService.UpdateAsync(
+                id,
+                request,
+                cancellationToken);
+
+        if (result.IsFailure)
+        {
+            return BadRequest(result.Error);
+        }
+
+        return NoContent();
+    }
+
+
+    [HttpDelete("{id:guid}")]
+    public async Task<IActionResult> Delete(
+        Guid id,
+        CancellationToken cancellationToken)
+    {
+        var result =
+            await _ticketService.DeleteAsync(
+                id,
+                cancellationToken);
+
+        if (result.IsFailure)
+        {
+            return NotFound(result.Error);
+        }
+
+        return NoContent();
+    }
+
 }

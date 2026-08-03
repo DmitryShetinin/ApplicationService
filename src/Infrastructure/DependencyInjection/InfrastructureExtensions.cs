@@ -10,7 +10,8 @@ public static class DependencyInjection
       IConfiguration configuration)
   {
     services
-       .AddPersistence(configuration);
+       .AddPersistence(configuration)
+       .AddQueries();
        
 
     return services;

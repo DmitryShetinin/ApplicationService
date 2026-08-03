@@ -13,23 +13,10 @@ public sealed class EmployeeConfiguration
 
         builder.HasKey(x => x.Id);
 
-        builder.OwnsOne(x => x.FullName, fullName =>
-        {
-            fullName.Property(x => x.FirstName)
-                .HasColumnName("FirstName")
-                .HasMaxLength(100)
-                .IsRequired();
-
-            fullName.Property(x => x.LastName)
-                .HasColumnName("LastName")
-                .HasMaxLength(100)
-                .IsRequired();
-
-            fullName.Property(x => x.Patronymic)
-                .HasColumnName("MiddleName")
-                .HasMaxLength(100);
-        });
-
+       
+      
+    
+    
         builder.HasOne(x => x.Department)
             .WithMany()
             .HasForeignKey(x => x.DepartmentId)
