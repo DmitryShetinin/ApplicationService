@@ -35,7 +35,7 @@ docker compose up --build
 
 * ASP.NET Core Web API
 * PostgreSQL база данных
-* React клиентское приложение (если используется отдельный frontend контейнер)
+* React клиентское приложение  
 
 API доступен по адресу:
 
