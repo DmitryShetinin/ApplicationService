@@ -17,23 +17,6 @@ builder.Services.AddControllers();
  
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-builder.Services.AddCors(options =>
-{
-    options.AddPolicy("Frontend", policy =>
-    {
-        policy
-            .SetIsOriginAllowed(origin =>
-            {
-                var uri = new Uri(origin);
-
-                return uri.Host == "localhost";
-            })
-            .AllowAnyHeader()
-            .AllowAnyMethod()
-            .AllowCredentials();
-    });
-});
- 
 
 
 var app = builder.Build();
@@ -46,7 +29,10 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 } 
-app.UseCors("Frontend");
+app.UseDefaultFiles();
+app.UseStaticFiles();
+
+
 
 app.UseAuthorization();
 

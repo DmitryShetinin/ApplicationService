@@ -61,7 +61,7 @@
             deleteTicket,
             createTicket
         } = useTicketActions(
-    
+                console.log
     
         );
         

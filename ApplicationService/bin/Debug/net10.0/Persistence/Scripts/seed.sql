@@ -1,3 +1,6 @@
+TRUNCATE TABLE public."Employees" CASCADE;
+
+
 INSERT INTO public."Departments" ("Id", "Name") VALUES
 ('3fa85f64-5717-4562-b3fc-2c963f66afa6', 'Разработка'),
 ('3fa85f64-5717-4562-b3fc-2c963f66afa5', 'Тестирование'),
@@ -56,7 +59,8 @@ INSERT INTO "Tickets"
     "ExecutorId",
     "Description",
     "Deadline",
-    "Status"
+    "Status",
+ "Version"
 )
 SELECT
     gen_random_uuid(),
@@ -89,7 +93,9 @@ SELECT
         WHEN random() < 0.33 THEN 1
         WHEN random() < 0.66 THEN 2
         ELSE 3
-    END
+    END, 
+    
+    1
 
 FROM generate_series(1,1000000) gs(i)
 CROSS JOIN emp;
